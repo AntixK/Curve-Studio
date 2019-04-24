@@ -1,0 +1,28 @@
+{
+    "name": "Curve-Studio",
+    "version": "1.0.0",
+    "description": "A minimal Electron application running a p5.js sketch",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "build --dir",
+        "dist": "build",
+        "postinstall": "install-app-deps"
+    },
+    "keywords": [
+        "Electron",
+        "quick",
+        "start",
+        "tutorial",
+        "demo",
+        "p5.js"
+    ],
+    "author": "Anand Subramanian",
+    "license": "tbd",
+    "devDependencies": {
+        "electron": "^1.4.1",
+        "electron-builder": "^20.40.2",
+        "electron-packager": "^13.1.1",
+        "electron-reload": "^1.4.0"
+    }
+}
