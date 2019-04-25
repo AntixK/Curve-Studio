@@ -72,7 +72,8 @@ function doubleClicked()
 
 function mouseWheel(event) {
   zoom += sensativity * event.delta;
-  zoom = constrain(zoom, zMin, zMax);
+  zoom = constrain(zoom, 0.05, 5.0);
+  zoom_slider.value(zoom*100);
   //uncomment to block page scrolling
   return false;
 }

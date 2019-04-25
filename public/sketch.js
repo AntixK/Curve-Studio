@@ -24,9 +24,11 @@ var zoom = 1.00;
 
 //Interactivity
 let locked = false;
-let export_button;
-let import_button;
-let reset_button;
+var export_button;
+var import_button;
+var reset_button;
+var zoom_slider;
+var zoom_text;
 
 //Data fields
 let x_text;
@@ -53,6 +55,8 @@ function setup() {
   pt_colour = color(244, 122, 158);
   line_color = color(141, 205, 193);
   curve_colour = color(250, 163, 0);
+  zoom_slider = createSlider(10, 200, 100);
+  zoom_slider.input(update_zoom);
 
   curr_marker = new Marker();
   canvas = createCanvas(WIDTH, HEIGHT);
@@ -70,6 +74,12 @@ function setup() {
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
 
+  zoom_text = createElement('p','Zoom');
+  zoom_text.position(170, HEIGHT-10);
+  zoom_text.style('font-size', '20px');
+  zoom_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  zoom_text.style('color', 'white');
+
   reset_canvas();
 
   rectMode(RADIUS);
@@ -84,7 +94,7 @@ function setup() {
   reset_button.mousePressed(reset_canvas);
 
   translate(WIDTH/2, HEIGHT/2);
-
+  
 
 }
 
@@ -168,12 +178,14 @@ function export_json()
 
 function import_json()
 {
+
   
 }
 
 function reset_canvas()
 {
   zoom = 1.0;
+  zoom_slider.value(zoom*100);
   control_points = []
   text_field_array = []
   let k = 0;
@@ -242,4 +254,9 @@ function update_text_field()
     }    
   }
 
+}
+
+function update_zoom()
+{
+  zoom = zoom_slider.value()/100.0;
 }
