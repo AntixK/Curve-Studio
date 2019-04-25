@@ -1,22 +1,51 @@
-var control_points = [];
-let locked = false;
-var v1;
 var N = 4;
+var curr_marker;
+var control_points = [];
+
+//UI
+var WIDTH = 720;
+var HEIGHT = 420;
+var canvas;
+
 var bg_colour;
 var pt_colour;
 var line_color;
 var curve_colour;
-var curr_marker;
 var text_colour;
+
 let font;
+let button_font;
+let num_font;
+
+let NUM_X = 760;
+let NUM_Y = 60;
 var sensativity = 0.001;
 var zoom = 1.00;
-var curve = [];
+
+//Interactivity
+let locked = false;
+let export_button;
+let import_button;
+let reset_button;
+
+//Data fields
+let x_text;
+let y_text;
+var point_num = [];
+var curr_point_id = 0;
+var text_field_array = []
+
+
+// JSON files
+let json_file = {};
 //var bspline = require('b-spline');
 
-// function preload() {
-//   font = loadFont('D:/p5/p5/empty-example/assets/VarelaRound-Regular.otf');
-// }
+function preload() {
+  font = loadFont('assets/MontserratAlternates-SemiBold.otf');
+  button_font = loadFont('assets/VarelaRound.otf');
+  num_font = loadFont('assets/SourceCodePro-Light.otf')
+
+}
 
 function setup() {
   bg_colour = color(48, 48, 50);
@@ -25,21 +54,43 @@ function setup() {
   line_color = color(141, 205, 193);
   curve_colour = color(250, 163, 0);
 
-  for(let i =0; i<N; ++i)
-  {
-    control_points.push(new Marker());
-  }
-  
   curr_marker = new Marker();
-  createCanvas(720, 400);
+  canvas = createCanvas(WIDTH, HEIGHT);
+  canvas.parent("sketchHolder");
+
+  x_text = createElement('p',"X");
+  x_text.position(NUM_X + 20,15);
+  x_text.style('font-size', '20px');
+  x_text.style('font-family', num_font.font.names.postScriptName["en"]);
+  x_text.style('color', 'white');
+
+  y_text = createElement('p',"Y");
+  y_text.position(NUM_X +75,15);
+  y_text.style('font-size', '20px');
+  y_text.style('font-family', num_font.font.names.postScriptName["en"]);
+  y_text.style('color', 'white');
+
+  reset_canvas();
 
   rectMode(RADIUS);
   noStroke();
+  export_button = new Button('Export json', 870,370);
+  export_button.mousePressed(export_json);
+
+  import_button = new Button('Import json', 740,370);
+  import_button.mousePressed(import_json);
+
+  reset_button = new Button('Reset', 740,300);
+  reset_button.mousePressed(reset_canvas);
+
+  translate(WIDTH/2, HEIGHT/2);
+
+
 }
 
 function draw_lines()
 {
-  stroke(line_color,alpha=0.0);
+  stroke(line_color);
   strokeWeight(3);
   for(let i =1; i < control_points.length; ++i)
   {
@@ -61,6 +112,21 @@ function draw_Catmull_Rom()
   endShape();
 }
 
+function set_in_canvas()
+{
+  if(
+    mouseX > 0 && mouseX < WIDTH &&
+    mouseY > 0 && mouseY < HEIGHT
+  )
+  { 
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 function draw() 
 {
   background(bg_colour);
@@ -74,61 +140,106 @@ function draw()
     fill(pt_colour);
     circle(control_points[i].x, control_points[i].y, control_points[i].boxSize);
 
-    //textFont(font);
-    textSize(12);
+    textFont(font);
+    textSize(15);
     fill(text_colour);
-    text("("+(control_points[i].x).toFixed() + ","+(control_points[i].y).toFixed()+")", control_points[i].x-10, control_points[i].y-20);
+    text("("+(control_points[i].x).toFixed() + ","+(control_points[i].y).toFixed()+")", 
+              control_points[i].x-10, control_points[i].y-20);
   }
-  draw_Catmull_Rom();
 
+  draw_Catmull_Rom();
+  
 
 }
 
-function mousePressed() 
+function export_json()
 {
-  for(let i =0; i < control_points.length; ++i)
-  {      
-    if (control_points[i].check_in_circle()) 
-    { 
-      curr_marker = control_points[i];
-      locked = true;
-      break;
-      //fill(244, 122, 158);
-    }
-    else
-    {
-      locked = false;
-    }
+  json_file.curve_type = 'Catmull Rom Spline';
+  let control_array = [];
+
+  for(let i=0; i<control_points.length;++i)
+  {
+    let arr = [control_points[i].x, control_points[i].y]
+    control_array.push(arr);
   }
-  curr_marker.xOffset = mouseX - curr_marker.x;
-  curr_marker.yOffset = mouseY - curr_marker.y;   
+  json_file.control_points = control_array;
+  saveJSON(json_file, json_file.curve_type+".json");
+}
+
+function import_json()
+{
   
 }
 
-function mouseDragged() 
+function reset_canvas()
 {
-  if (locked) {    
-    curr_marker.x = mouseX - curr_marker.xOffset;
-    curr_marker.y = mouseY - curr_marker.yOffset;
+  zoom = 1.0;
+  control_points = []
+  text_field_array = []
+  let k = 0;
+  for(let i =0; i<N; ++i)
+  {
+    control_points.push(new Marker());
+    
+    point_num.push(createElement('p',"num"));
+    point_num[i].style('font-size', '18px');
+    point_num[i].style('font-family', font.font.names.postScriptName["en"]);
+    point_num[i].style('color', 'white');    
+    point_num[i].html(i+1);
+    point_num[i].style('text-align', 'left');
+    point_num[i].position(NUM_X - 20,(NUM_Y - 15)+i*40);
+
+    for(let j = 0; j < 2; ++j)
+    {
+      text_field_array.push(new TextField(NUM_X + j*60, NUM_Y+i*40));
+      text_field_array[k].set_id_coord(i,j);
+      if(j==0)
+      { 
+        text_field_array[k].set_val(control_points[i].x.toFixed(2));
+      }
+      else
+      {
+        text_field_array[k].set_val(control_points[i].y.toFixed(2));
+      }
+
+      k++;
+    }    
+  }
+  noStroke();
+}
+
+function update_control_pts()
+{
+  for(let k =0; k<text_field_array.length; ++k)
+  {
+    if(text_field_array[k].coord == 0)
+    {
+      control_points[text_field_array[k].id].x = text_field_array[k].get_val();
+    }
+    else
+    {
+      control_points[text_field_array[k].id].y = text_field_array[k].get_val();
+    }
   }
 }
 
-function mouseReleased() 
+function update_text_field()
 {
-  locked = false;
-  curr_marker.boxSize = 15;
+  let k = 0;
+  for(let i =0; i<N; ++i)
+  {
+    for(let j = 0; j < 2; ++j)
+    {
+      if(j==0)
+      { 
+        text_field_array[k].set_val(control_points[i].x.toFixed(2));
+      }
+      else
+      {
+        text_field_array[k].set_val(control_points[i].y.toFixed(2));
+      }
+      k++;
+    }    
+  }
+
 }
-
-function doubleClicked() {
-  control_points.push(new Marker());
-  control_points[control_points.length - 1].x = mouseX;
-  control_points[control_points.length - 1].y = mouseY;
-
-}
-
-// function mouseWheel(event) {
-//   zoom += sensativity * event.delta;
-//   zoom = constrain(zoom, zMin, zMax);
-//   //uncomment to block page scrolling
-//   return false;
-// }

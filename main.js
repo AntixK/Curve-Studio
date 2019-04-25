@@ -16,11 +16,11 @@ function createWindow() {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 920,
-        height: 420,
+        width: 1000,
+        height: 440,
         // center: true,
         // frame: false, 
-        // resizable: false,
+        resizable: false,
         // alwaysOnTop: true,
         useContentSize: true // when false, width/height will set the size of the whole app, including frames. If true, innerWindow will be set instead, resulting in a bigger app window
     })

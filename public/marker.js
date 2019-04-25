@@ -2,8 +2,8 @@ class Marker
 {
   constructor()
   {
-    this.x =random(width)+100
-    this.y = random(height)+100
+    this.x = 30 + random(width-50)
+    this.y = 30 + random(height-50)
     this.xOffset = 0;
     this.yOffset = 0;
     this.boxSize = 15;
@@ -13,10 +13,10 @@ class Marker
   check_in_circle()
   {
     if (
-      mouseX > this.x - this.boxSize &&
-      mouseX < this.x + this.boxSize &&
-      mouseY > this.y - this.boxSize &&
-      mouseY < this.y + this.boxSize
+      mouseX/zoom > this.x - this.boxSize &&
+      mouseX/zoom < this.x + this.boxSize &&
+      mouseY/zoom > this.y - this.boxSize &&
+      mouseY/zoom < this.y + this.boxSize
     )
     {
       this.overBox = true;
