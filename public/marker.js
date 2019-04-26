@@ -2,8 +2,8 @@ class Marker
 {
   constructor()
   {
-    this.x = 30 + random(width-50)
-    this.y = 30 + random(height-50)
+    this.x = 30 + random(WIDTH-50)
+    this.y = 30 + random(HEIGHT-50)
     this.xOffset = 0;
     this.yOffset = 0;
     this.boxSize = 15;

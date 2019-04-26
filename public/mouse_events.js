@@ -1,4 +1,4 @@
-function mousePressed() 
+function click_point() 
 {
   for(let i =0; i < control_points.length; ++i)
   {      
@@ -6,18 +6,21 @@ function mousePressed()
     { 
       curr_marker = control_points[i];
       locked = true;
+      pan_lock=false;
       curr_point_id = i;
-      point_num[i].style('color', '#FD971F');  
+      point_num[i].style('color', '#FD971F');
+      curr_marker.xOffset = mouseX - curr_marker.x;
+      curr_marker.yOffset = mouseY - curr_marker.y;     
       break;
       //fill(244, 122, 158);
     }
     else
     {
       locked = false;
+      pan_lock = true;
     }
   }
-  curr_marker.xOffset = mouseX - curr_marker.x;
-  curr_marker.yOffset = mouseY - curr_marker.y;   
+  
   
 }
 
@@ -28,16 +31,18 @@ function mouseDragged()
     curr_marker.y = mouseY - curr_marker.yOffset;
     update_text_field();
   }
+
 }
 
-function mouseReleased() 
+function release_point() 
 {
   locked = false;
+  pan_lock = false;
   curr_marker.boxSize = 15;
   point_num[curr_point_id].style('color', 'white');  
 }
 
-function doubleClicked() 
+function create_point() 
 {
   if(set_in_canvas() && N < 6)
   {

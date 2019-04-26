@@ -1,16 +1,16 @@
 class Button
 {
-    constructor(name, posx, posy)
+    constructor(name, posx, posy, height='60px', width='120px',font_size='20px',bgc='#0a3242',radius = '1%')
     {
         this.button = createButton(name);
         this.button.parent("sketchHolder");
         this.button.position(posx,posy);
         
-        this.button.style('width', '120px');
-        this.button.style('height', '60px');
-        this.button.style('font-size', '20px');
-        this.button.style('border-radius', '1%');
-        this.button.style('background-color', '#0a3242');
+        this.button.style('width', width);
+        this.button.style('height', height);
+        this.button.style('font-size', font_size);
+        this.button.style('border-radius', radius);
+        this.button.style('background-color', bgc);
         this.button.style('color', 'white');
         this.button.style('border','none');
         this.button.style('font-family', button_font.font.names.postScriptName["en"]);

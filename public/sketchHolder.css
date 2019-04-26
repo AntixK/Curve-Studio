@@ -5,6 +5,10 @@
   position: relative;
 }
 
+a {
+  color: red;
+}
+
 div input {
   
 }

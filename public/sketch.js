@@ -13,6 +13,8 @@ var line_color;
 var curve_colour;
 var text_colour;
 
+var pan_lock =false;
+
 let font;
 let button_font;
 let num_font;
@@ -29,6 +31,11 @@ var import_button;
 var reset_button;
 var zoom_slider;
 var zoom_text;
+var zoom_reset_button;
+let panx = 0;
+let pany = 0;
+let pan_offset_x = 0;
+let pan_offset_y = 0;
 
 //Data fields
 let x_text;
@@ -55,30 +62,37 @@ function setup() {
   pt_colour = color(244, 122, 158);
   line_color = color(141, 205, 193);
   curve_colour = color(250, 163, 0);
+
   zoom_slider = createSlider(10, 200, 100);
+  zoom_slider.style('border-radius', '50%');
+  zoom_slider.style('background', '#4CAF50');
   zoom_slider.input(update_zoom);
 
   curr_marker = new Marker();
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("sketchHolder");
+  canvas.mousePressed(click_point);
+  canvas.mouseReleased(release_point);
+  canvas.doubleClicked(create_point);
 
-  x_text = createElement('p',"X");
+  x_text = createP("X");
   x_text.position(NUM_X + 20,15);
   x_text.style('font-size', '20px');
   x_text.style('font-family', num_font.font.names.postScriptName["en"]);
   x_text.style('color', 'white');
 
-  y_text = createElement('p',"Y");
+  y_text = createP("Y");
   y_text.position(NUM_X +75,15);
   y_text.style('font-size', '20px');
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
 
-  zoom_text = createElement('p','Zoom');
-  zoom_text.position(170, HEIGHT-10);
-  zoom_text.style('font-size', '20px');
-  zoom_text.style('font-family', button_font.font.names.postScriptName["en"]);
-  zoom_text.style('color', 'white');
+  // zoom_text = createP(" \u2315");
+  // zoom_text.position(175, HEIGHT-35);
+  // zoom_text.style('font-size', '35px');
+  // zoom_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  // zoom_text.style('color', 'white');
+  // zoom_text.mousePressed(zoom_reset);
 
   reset_canvas();
 
@@ -93,7 +107,12 @@ function setup() {
   reset_button = new Button('Reset', 740,300);
   reset_button.mousePressed(reset_canvas);
 
-  translate(WIDTH/2, HEIGHT/2);
+  zoom_reset_button = new Button("\u2315", 175,HEIGHT+5, 
+                                    height='45px', width='45px',
+                                    font_size='35px',bgc='transparent',radius='30%');
+  zoom_reset_button.mousePressed(zoom_reset);
+
+  //translate(WIDTH/2, HEIGHT/2);
   
 
 }
@@ -142,6 +161,15 @@ function draw()
   background(bg_colour);
 
   scale(zoom);
+  
+  // if(pan_lock)
+  // {
+  //   pan_offset_x = mouseX - panx;
+  //   pan_offset_y = mouseY - pany;
+    
+  // }
+  // translate(-panx + pan_offset_x, -pany + pan_offset_y);
+
   draw_lines();
   for(let i =0; i < control_points.length; ++i)
   {
@@ -158,6 +186,7 @@ function draw()
   }
 
   draw_Catmull_Rom();
+  create_grid();
   
 
 }
@@ -189,11 +218,12 @@ function reset_canvas()
   control_points = []
   text_field_array = []
   let k = 0;
+  //N = 4;
   for(let i =0; i<N; ++i)
   {
     control_points.push(new Marker());
     
-    point_num.push(createElement('p',"num"));
+    point_num.push(createElement('p'));
     point_num[i].style('font-size', '18px');
     point_num[i].style('font-family', font.font.names.postScriptName["en"]);
     point_num[i].style('color', 'white');    
@@ -217,6 +247,7 @@ function reset_canvas()
       k++;
     }    
   }
+  
   noStroke();
 }
 
@@ -259,4 +290,25 @@ function update_text_field()
 function update_zoom()
 {
   zoom = zoom_slider.value()/100.0;
+}
+
+function create_grid()
+{
+  let w = 20*zoom;
+  stroke(255);
+  strokeWeight(0.2);
+  for(let x=0; x<WIDTH/zoom; x+= w)
+  {
+    line(x,0, x,HEIGHT/zoom);
+    if(x < HEIGHT/zoom)
+    {
+      line(0,x, WIDTH/zoom,x);
+    }
+  }
+}
+
+function zoom_reset()
+{
+  zoom = 1.0;
+  zoom_slider.value(zoom*100);
 }
