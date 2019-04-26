@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<!-- 
+
   <head>
-      <style>
-      .button {
+    <style>
+      .mybutton {
         background-color: #0a3242; /* Green */
         border: none;
         color: white;
@@ -11,18 +11,49 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 16px;
+        font-size: 20px;
         margin: 4px 2px;
+        opacity: 0.7;
+        transition: 0.3s;
+        font-family: 'VarelaRound';
         cursor: pointer;
-        border-radius:1%;
-        width:120;
-        height:50;
+        border-radius:5%;
+        width:120px;
+        height:60px;
+        font-variant: small-caps;
+        white-space: normal;
       }
-      
-    </style>
-  </head> -->
+    .mybutton:hover {opacity: 1}  
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 120px;
+      height: 5px;
+      background: #0a3242;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
 
-  <head>
+    .slider:hover {
+      opacity: 1;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      background: #1c86af;
+      cursor: pointer;
+      border-radius:50%;
+    }
+
+    #my-file{
+    display:none;
+    }
+
+    </style>
+
     <meta charset="UTF-8">
     <title>Curve Studio</title>
     <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
@@ -46,7 +77,14 @@
   <body>
     <!-- <button class="button button"></button> -->
     <!-- <a href="#" onmouseover = "this.style.color = '#000'" onmouseout  = "this.style.color = '#f00'">Hi</a> -->
-
+    <p>
+      <input type="file" name="my_file" id="my-file">
+      <input type="button" class="mybutton" onclick="import_json()" value="Import JSON" id="importjson">
+      
+      <button class = "mybutton" id='exportjson'>Export JSON</button>
+      <button class = "mybutton" id='reset'>Reset</button>
+      <input type="range" min="10" max="500" value="100" class="slider" id="zoomslider">
+    </p>
   </body>
 
   <script>

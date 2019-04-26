@@ -47,6 +47,7 @@ var text_field_array = []
 
 // JSON files
 let json_file = {};
+let in_json_file = [];
 //var bspline = require('b-spline');
 
 function preload() {
@@ -63,9 +64,7 @@ function setup() {
   line_color = color(141, 205, 193);
   curve_colour = color(250, 163, 0);
 
-  zoom_slider = createSlider(10, 200, 100);
-  zoom_slider.style('border-radius', '50%');
-  zoom_slider.style('background', '#4CAF50');
+  zoom_slider = select('#zoomslider')
   zoom_slider.input(update_zoom);
 
   curr_marker = new Marker();
@@ -87,35 +86,43 @@ function setup() {
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
 
-  // zoom_text = createP(" \u2315");
-  // zoom_text.position(175, HEIGHT-35);
-  // zoom_text.style('font-size', '35px');
-  // zoom_text.style('font-family', button_font.font.names.postScriptName["en"]);
-  // zoom_text.style('color', 'white');
-  // zoom_text.mousePressed(zoom_reset);
-
   reset_canvas();
 
   rectMode(RADIUS);
   noStroke();
-  export_button = new Button('Export json', 870,370);
-  export_button.mousePressed(export_json);
-
-  import_button = new Button('Import json', 740,370);
-  import_button.mousePressed(import_json);
-
-  reset_button = new Button('Reset', 740,300);
-  reset_button.mousePressed(reset_canvas);
 
   zoom_reset_button = new Button("\u2315", 175,HEIGHT+5, 
                                     height='45px', width='45px',
                                     font_size='35px',bgc='transparent',radius='30%');
   zoom_reset_button.mousePressed(zoom_reset);
+  export_button = select("#exportjson");
+  export_button.position(870,370);
+  export_button.mousePressed(export_json);
+
+  import_button = select("#importjson");
+  import_button.position(740,370);
+  import_button.mousePressed(import_json);
+
+  reset_button = select("#reset");
+  reset_button.position(740,300);
+  reset_button.mousePressed(reset_canvas);
+
+  // gg= createFileInput(import_json);
+  // gg.class("mybutton");
+  // gg.style('width', '120px');
+  // gg.style('height', '60px');
+  // gg.style('font-size', '20px');
+  // gg.style('border-radius', '1%');
+  // gg.style('background-color', '#0a3242');
+  // gg.style('color', 'white');
+  // gg.style('border','none');
+  // gg.style('font-family', button_font.font.names.postScriptName["en"]);
 
   //translate(WIDTH/2, HEIGHT/2);
   
 
 }
+
 
 function draw_lines()
 {
@@ -207,7 +214,12 @@ function export_json()
 
 function import_json()
 {
+  var file = document.getElementById('my-file').click();
+  file = document.getElementById('my-file').files[0];
 
+  console.log(file);
+  //in_json_file = loadJSON();
+  
   
 }
 
