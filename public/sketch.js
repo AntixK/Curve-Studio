@@ -4,7 +4,7 @@ var control_points = [];
 
 //UI
 var WIDTH = 720;
-var HEIGHT = 420;
+var HEIGHT = 480;
 var canvas;
 
 var bg_colour;
@@ -13,29 +13,34 @@ var line_color;
 var curve_colour;
 var text_colour;
 
-var pan_lock =false;
-
 let font;
 let button_font;
 let num_font;
 
-let NUM_X = 760;
-let NUM_Y = 60;
-var sensativity = 0.001;
-var zoom = 1.00;
+let NUM_X = WIDTH+40;
+let NUM_Y = 100;
+
 
 //Interactivity
 let locked = false;
 var export_button;
 var import_button;
 var reset_button;
+
+var sensativity = 0.001;
+var zoom = 1.00;
 var zoom_slider;
 var zoom_text;
 var zoom_reset_button;
+
+var pan_lock =false;
 let panx = 0;
 let pany = 0;
 let pan_offset_x = 0;
 let pan_offset_y = 0;
+
+var tab_handle = 0;
+
 
 //Data fields
 let x_text;
@@ -47,7 +52,8 @@ var text_field_array = []
 
 // JSON files
 let json_file = {};
-let in_json_file = [];
+let in_json_file;
+var file_handle;
 //var bspline = require('b-spline');
 
 function preload() {
@@ -64,7 +70,8 @@ function setup() {
   line_color = color(141, 205, 193);
   curve_colour = color(250, 163, 0);
 
-  zoom_slider = select('#zoomslider')
+  zoom_slider = select('#zoomslider');
+  zoom_slider.position(10, HEIGHT + 22);
   zoom_slider.input(update_zoom);
 
   curr_marker = new Marker();
@@ -75,13 +82,13 @@ function setup() {
   canvas.doubleClicked(create_point);
 
   x_text = createP("X");
-  x_text.position(NUM_X + 20,15);
+  x_text.position(NUM_X + 20,NUM_Y-50);
   x_text.style('font-size', '20px');
   x_text.style('font-family', num_font.font.names.postScriptName["en"]);
   x_text.style('color', 'white');
 
   y_text = createP("Y");
-  y_text.position(NUM_X +75,15);
+  y_text.position(NUM_X +75,NUM_Y-50);
   y_text.style('font-size', '20px');
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
@@ -91,21 +98,25 @@ function setup() {
   rectMode(RADIUS);
   noStroke();
 
-  zoom_reset_button = new Button("\u2315", 175,HEIGHT+5, 
+  zoom_reset_button = new Button("\u2315", 135,HEIGHT+5, 
                                     height='45px', width='45px',
-                                    font_size='35px',bgc='transparent',radius='30%');
+                                    font_size='30px',bgc='transparent',radius='30%');
   zoom_reset_button.mousePressed(zoom_reset);
+  
   export_button = select("#exportjson");
-  export_button.position(870,370);
+  export_button.position(WIDTH+150,HEIGHT-50);
   export_button.mousePressed(export_json);
 
   import_button = select("#importjson");
-  import_button.position(740,370);
+  import_button.position(WIDTH+20,HEIGHT-50);
   import_button.mousePressed(import_json);
 
   reset_button = select("#reset");
-  reset_button.position(740,300);
+  reset_button.position(WIDTH+20,HEIGHT-120);
   reset_button.mousePressed(reset_canvas);
+
+  // tab_handle =select("#tabs");
+  // tab_handle.position(WIDTH, 0);
 
   // gg= createFileInput(import_json);
   // gg.class("mybutton");
@@ -214,12 +225,22 @@ function export_json()
 
 function import_json()
 {
-  var file = document.getElementById('my-file').click();
-  file = document.getElementById('my-file').files[0];
+  file_handle = document.getElementById('my-file').click();
+  file_handle = document.querySelector('input[type="file"]');
+  file_handle.addEventListener('change', function(e){
+    const reader = new FileReader(); 
+    reader.onload = function(){      
+      in_json_file = JSON.parse(reader.result);
+      let pts = in_json_file.control_points;
+      for(let i = 0;i<pts.length;++i)
+      {
+        control_points[i].x = pts[i][0];
+        control_points[i].y = pts[i][1];
 
-  console.log(file);
-  //in_json_file = loadJSON();
-  
+      }
+    }
+    reader.readAsText(file_handle.files[0]);
+  }, false);   
   
 }
 

@@ -12,7 +12,6 @@
         text-decoration: none;
         display: inline-block;
         font-size: 20px;
-        margin: 4px 2px;
         opacity: 0.7;
         transition: 0.3s;
         font-family: 'VarelaRound';
@@ -23,9 +22,12 @@
         font-variant: small-caps;
         white-space: normal;
       }
-    .mybutton:hover {opacity: 1}  
+    .mybutton:hover {
+      opacity: 1;
+      margin: -3px 0 0 0;
+      }  
     
-    .slider {
+    .myslider {
       -webkit-appearance: none;
       width: 120px;
       height: 5px;
@@ -36,16 +38,52 @@
       transition: opacity .2s;
     }
 
-    .slider:hover {
+    .myslider:hover {
       opacity: 1;
+      
     }
 
-    .slider::-moz-range-thumb {
+    .myslider::-moz-range-thumb {
       width: 15px;
       height: 15px;
       background: #1c86af;
       cursor: pointer;
       border-radius:50%;
+    }
+
+    /* Style the tab */
+    .tab {
+      overflow: hidden;
+      width:330px;
+      position: absolute;
+      left: 740px;
+      top: 10px;
+      border: none;
+      background-color: #011219;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+      background-color: #0a3242;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: white;
+      border-radius:5%;
+      font-variant: small-caps;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 20px;
+      font-family: 'VarelaRound';
+      opacity: 0.7;
+      
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+      opacity: 1;
+      margin: -5px 0 0 0;
     }
 
     #my-file{
@@ -78,13 +116,20 @@
     <!-- <button class="button button"></button> -->
     <!-- <a href="#" onmouseover = "this.style.color = '#000'" onmouseout  = "this.style.color = '#f00'">Hi</a> -->
     <p>
+      <div class="tab",id="tabs">
+          <button class="tablinks" onclick="" id="defaultOpen">Catmull</button>
+          <button class="tablinks" onclick="">BSpline</button>
+          <button class="tablinks" onclick="">NURBS</button>
+        </div>
+
       <input type="file" name="my_file" id="my-file">
       <input type="button" class="mybutton" onclick="import_json()" value="Import JSON" id="importjson">
       
       <button class = "mybutton" id='exportjson'>Export JSON</button>
       <button class = "mybutton" id='reset'>Reset</button>
-      <input type="range" min="10" max="500" value="100" class="slider" id="zoomslider">
+      <input type="range" min="10" max="500" value="100" class="myslider" id="zoomslider">
     </p>
+
   </body>
 
   <script>
