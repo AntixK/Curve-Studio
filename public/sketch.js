@@ -103,7 +103,7 @@ function setup() {
   x_mark.mouseClicked(delete_point);
   
 
-  reset_canvas();
+  reset_canvas(false);
 
   rectMode(RADIUS);
   noStroke();
@@ -228,26 +228,68 @@ function import_json()
     reader.onload = function(){      
       in_json_file = JSON.parse(reader.result);
       let pts = in_json_file.control_points;
+
+      zoom = 1.0;
+      zoom_slider.value(zoom*100); 
+      for(let i  =0; i < N;++i)
+      {
+        delete_point();
+      }
+    
+      control_points = []
+      text_field_array = []
+      N = pts.length;
+      
+      let k = 0;
       for(let i = 0;i<pts.length;++i)
       {
+        control_points.push(new Marker());
         control_points[i].x = pts[i][0];
         control_points[i].y = pts[i][1];
 
+        point_num.push(createElement('p'));
+        point_num[i].style('font-size', '18px');
+        point_num[i].style('font-family', font.font.names.postScriptName["en"]);
+        point_num[i].style('color', 'white');    
+        point_num[i].html(i+1);
+        point_num[i].style('text-align', 'left');
+        point_num[i].position(NUM_X - 20,(NUM_Y - 15)+i*40);
+        
+        for(let j = 0; j < 2; ++j)
+        {
+          text_field_array.push(new TextField(NUM_X + j*80, NUM_Y+i*40));
+          text_field_array[k].set_id_coord(i,j);
+          if(j==0)
+          { 
+            text_field_array[k].set_val(control_points[i].x.toFixed(2));
+          }
+          else
+          {
+            text_field_array[k].set_val(control_points[i].y.toFixed(2));
+          }
+
+          k++;
+        }
+
       }
+      x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+      x_mark.html('\u2718');
+      
+
     }
     reader.readAsText(file_handle.files[0]);
   }, false);   
   
 }
 
-function reset_canvas()
+function reset_canvas(flag = true)
 {
   zoom = 1.0;
-  zoom_slider.value(zoom*100);
-  
-  if(N > 4)
+  zoom_slider.value(zoom*100); 
+
+  if(flag)
   {
-    for(let i  =0; i < N;++i)
+    while(N > 0)
     {
       delete_point();
     }
@@ -287,6 +329,7 @@ function reset_canvas()
     }    
   }
   x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+  x_mark.html('\u2718');
   
   noStroke();
 }

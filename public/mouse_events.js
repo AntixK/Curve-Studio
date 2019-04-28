@@ -82,7 +82,7 @@ function create_point()
 
 function delete_point()
 {
-  k = text_field_array.length-1;
+  let  k = text_field_array.length-1;
   text_field_array[k].remove_field();
   text_field_array.pop();
 
@@ -92,6 +92,7 @@ function delete_point()
   point_num[N-1].html('');
   point_num.pop();
   control_points.pop();
+
   N -= 1;
   if(N >1)
   { 
