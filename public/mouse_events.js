@@ -44,7 +44,7 @@ function release_point()
 
 function create_point() 
 {
-  if(set_in_canvas() && N < 6)
+  if(N < 6)
   {
     // create new control points and text field
     control_points.push(new Marker());
@@ -65,15 +65,43 @@ function create_point()
     text_field_array[k].set_id_coord(N-1,0);
     text_field_array[k].set_val(control_points[N-1].x.toFixed(2));    
     
-    text_field_array.push(new TextField(NUM_X+60, NUM_Y+(N-1)*40));
+    text_field_array.push(new TextField(NUM_X+80, NUM_Y+(N-1)*40));
     k = text_field_array.length-1;
     text_field_array[k].set_id_coord(N-1,1);
     text_field_array[k].set_val(control_points[N-1].y.toFixed(2));
+
+    x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+    if(x_mark.html() == "")
+    {
+      x_mark.html('\u2718');
+    }   
 
   }
 
 }
 
+function delete_point()
+{
+  k = text_field_array.length-1;
+  text_field_array[k].remove_field();
+  text_field_array.pop();
+
+  text_field_array[k-1].remove_field();
+  text_field_array.pop();
+
+  point_num[N-1].html('');
+  point_num.pop();
+  control_points.pop();
+  N -= 1;
+  if(N >1)
+  { 
+    x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+  }
+  else
+  {
+    x_mark.html('');
+  }
+}
 
 function mouseWheel(event) {
   zoom += sensativity * event.delta;
@@ -81,4 +109,14 @@ function mouseWheel(event) {
   zoom_slider.value(zoom*100);
   //uncomment to block page scrolling
   return false;
+}
+
+function highlight_x_mark()
+{
+  x_mark.style('color','orange');
+}
+
+function dehighlight_x_mark()
+{
+  x_mark.style('color','white');
 }

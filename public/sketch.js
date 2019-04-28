@@ -18,7 +18,7 @@ let button_font;
 let num_font;
 
 let NUM_X = WIDTH+40;
-let NUM_Y = 100;
+let NUM_Y = 120;
 
 
 //Interactivity
@@ -45,6 +45,7 @@ var tab_handle = 0;
 //Data fields
 let x_text;
 let y_text;
+let x_mark;
 var point_num = [];
 var curr_point_id = 0;
 var text_field_array = []
@@ -82,16 +83,25 @@ function setup() {
   canvas.doubleClicked(create_point);
 
   x_text = createP("X");
-  x_text.position(NUM_X + 20,NUM_Y-50);
+  x_text.position(NUM_X + 25,NUM_Y-50);
   x_text.style('font-size', '20px');
   x_text.style('font-family', num_font.font.names.postScriptName["en"]);
   x_text.style('color', 'white');
 
   y_text = createP("Y");
-  y_text.position(NUM_X +75,NUM_Y-50);
+  y_text.position(NUM_X +105,NUM_Y-50);
   y_text.style('font-size', '20px');
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
+
+  x_mark = createElement('p','\u2718');
+  x_mark.style('font-family', button_font.font.names.postScriptName["en"]);
+  x_mark.style('color','white');
+  x_mark.style('font-weight', 'bold');
+  x_mark.mouseOver(highlight_x_mark);
+  x_mark.mouseOut(dehighlight_x_mark);
+  x_mark.mouseClicked(delete_point);
+  
 
   reset_canvas();
 
@@ -159,20 +169,6 @@ function draw_Catmull_Rom()
   endShape();
 }
 
-function set_in_canvas()
-{
-  if(
-    mouseX > 0 && mouseX < WIDTH &&
-    mouseY > 0 && mouseY < HEIGHT
-  )
-  { 
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
 
 function draw() 
 {
@@ -248,10 +244,20 @@ function reset_canvas()
 {
   zoom = 1.0;
   zoom_slider.value(zoom*100);
+  
+  if(N > 4)
+  {
+    for(let i  =0; i < N;++i)
+    {
+      delete_point();
+    }
+  }
+
   control_points = []
   text_field_array = []
+  
   let k = 0;
-  //N = 4;
+  N = 4;
   for(let i =0; i<N; ++i)
   {
     control_points.push(new Marker());
@@ -266,7 +272,7 @@ function reset_canvas()
 
     for(let j = 0; j < 2; ++j)
     {
-      text_field_array.push(new TextField(NUM_X + j*60, NUM_Y+i*40));
+      text_field_array.push(new TextField(NUM_X + j*80, NUM_Y+i*40));
       text_field_array[k].set_id_coord(i,j);
       if(j==0)
       { 
@@ -280,6 +286,7 @@ function reset_canvas()
       k++;
     }    
   }
+  x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
   
   noStroke();
 }
@@ -319,6 +326,7 @@ function update_text_field()
   }
 
 }
+
 
 function update_zoom()
 {

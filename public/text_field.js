@@ -2,8 +2,9 @@ class TextField
 {
     constructor(posx, posy)
     {        
-        this.textfield = createInput();
-        this.textfield.style('width','50px');
+        this.textfield = createInput('','Number');
+        this.textfield.style('width','70px');
+        this.textfield.style('height','20px');
         this.textfield.style('font-family', num_font.font.names.postScriptName["en"]);
         this.textfield.parent('sketchHolder');
         this.textfield.position(posx, posy);
@@ -27,5 +28,10 @@ class TextField
     set_val(val)
     {
         this.textfield.value(val);
+    }
+
+    remove_field()
+    {
+        this.textfield.style('opacity','0');
     }
 }

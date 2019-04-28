@@ -7,7 +7,7 @@
         background-color: #0a3242; /* Green */
         border: none;
         color: white;
-        padding: 10px;
+        padding: 5px 5px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -43,9 +43,10 @@
       
     }
 
-    .myslider::-moz-range-thumb {
+    .myslider::-webkit-slider-thumb {
+      -webkit-appearance: none;
       width: 15px;
-      height: 15px;
+      height: 20px;
       background: #1c86af;
       cursor: pointer;
       border-radius:50%;
@@ -57,7 +58,7 @@
       width:330px;
       position: absolute;
       left: 740px;
-      top: 10px;
+      top: 15px;
       border: none;
       background-color: #011219;
     }
@@ -72,7 +73,7 @@
       color: white;
       border-radius:5%;
       font-variant: small-caps;
-      padding: 14px 16px;
+      padding: 14px 14px;
       transition: 0.3s;
       font-size: 20px;
       font-family: 'VarelaRound';
@@ -83,7 +84,7 @@
     /* Change background color of buttons on hover */
     .tab button:hover {
       opacity: 1;
-      margin: -5px 0 0 0;
+      margin: -2px 0 0 0;
     }
 
     #my-file{
