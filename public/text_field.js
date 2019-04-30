@@ -6,7 +6,7 @@ class TextField
         this.textfield.style('width','70px');
         this.textfield.style('height','20px');
         this.textfield.style('font-family', num_font.font.names.postScriptName["en"]);
-        this.textfield.parent('sketchHolder');
+        this.textfield.parent('content');
         this.textfield.position(posx, posy);
         this.textfield.changed(update_control_pts);
         this.id = 0;

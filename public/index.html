@@ -4,7 +4,7 @@
   <head>
     <style>
       .mybutton {
-        background-color: #0a3242; /* Green */
+        background-color: #078dc1; /* Green */
         border: none;
         color: white;
         padding: 5px 5px;
@@ -27,16 +27,7 @@
       margin: -3px 0 0 0;
       }  
     
-    #myDIV {
-    height: 250px;
-    width: 250px;
-    overflow: auto;
-    }
 
-    #content {
-    height: 800px;
-    background-color: coral;
-    }
 
     .myslider {
       -webkit-appearance: none;
@@ -69,14 +60,14 @@
       width:330px;
       position: absolute;
       left: 740px;
-      top: 15px;
+      top: 10px;
       border: none;
       background-color: #011219;
     }
 
     /* Style the buttons inside the tab */
     .tab button {
-      background-color: #0a3242;
+      background-color: #078dc1;
       float: left;
       border: none;
       outline: none;
@@ -89,18 +80,64 @@
       font-size: 20px;
       font-family: 'VarelaRound';
       opacity: 0.7;
+      margin: 3px 0 0 0;
       
     }
 
     /* Change background color of buttons on hover */
     .tab button:hover {
       opacity: 1;
-      margin: 0 0 0 0;
+      margin: 3px 0 0 0;
     }
 
     .tab button.active {
       opacity: 1;
-      margin: -3px 0 0 0;
+      margin: 0 0 0 0;
+    }
+
+    #tab_highlight {
+    height: 40px;
+    width: 309px;
+    position: absolute;
+    left: 740px;
+    top: 60px;
+    overflow: auto;
+    background-image: linear-gradient(#078dc1, #011219);
+    }
+
+    /*Tab content and divider for scrolling*/
+
+    #myDIV {
+    height: 230px;
+    width: 250px;
+    overflow: auto;
+    }
+
+    #content {
+
+    position: absolute;
+    }
+
+    .scroll {
+      width: 20px;
+      height: 200px;
+      overflow: auto;
+      float: left;
+      margin: 0 10px;
+    }
+
+    .scroll::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    .scroll::-webkit-scrollbar-thumb {
+      background: #078dc1;
+      border-radius: 20px;
+    }
+
+    .scroll::-webkit-scrollbar-track {
+      background: #ddd;
+      border-radius: 20px;
     }
 
     #my-file{
@@ -135,14 +172,16 @@
     <!-- <a href="#" onmouseover = "this.style.color = '#000'" onmouseout  = "this.style.color = '#f00'">Hi</a> -->
     <p>
       <div class="tab",id="tabs">
-          <button class="tablinks" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
+          <button class="tablinks active" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
           <button class="tablinks" onclick="opentab(event, 'BSpline')">BSpline</button>
           <button class="tablinks" onclick="opentab(event, 'NURBS')">NURBS</button>
       </div>
+      
+      <div id="tab_highlight"></div>
 
-      <!-- <div id="myDIV" onscroll="myFunction()">
+      <div id="myDIV"  class="scroll scroll" onscroll="myFunction()">
         <div id="content"></div>
-      </div> -->
+      </div>
 
       <input type="file" name="my_file" id="my-file">
       <input type="button" class="mybutton" onclick="import_json()" value="Import JSON" id="importjson">

@@ -28,7 +28,7 @@ let font;
 let button_font;
 let num_font;
 
-let NUM_X = WIDTH+40;
+let NUM_X = WIDTH+20;
 let NUM_Y = 120;
 
 
@@ -52,6 +52,7 @@ let pan_offset_y = 0;
 
 var tab_handle = 0;
 
+var tab_content;
 
 //Data fields
 let x_text;
@@ -60,6 +61,8 @@ let x_mark;
 var point_num = [];
 var curr_point_id = 0;
 var text_field_array = []
+var text_offset_x = 25;
+var text_offset_y = 0;
 
 
 // JSON files
@@ -94,19 +97,23 @@ function setup() {
   canvas.doubleClicked(create_point);
   canvas.mouseWheel(scroll_zoom);
 
+  tab_content = select("#myDIV");
+  tab_content.position(NUM_X, NUM_Y);
+
   x_text = createP("X");
-  x_text.position(NUM_X + 25,NUM_Y-50);
+  x_text.position(NUM_X + 25 + text_offset_x,NUM_Y-50+text_offset_y);
   x_text.style('font-size', '20px');
   x_text.style('font-family', num_font.font.names.postScriptName["en"]);
   x_text.style('color', 'white');
 
   y_text = createP("Y");
-  y_text.position(NUM_X +105,NUM_Y-50);
+  y_text.position(NUM_X +105 + text_offset_x,NUM_Y-50 + text_offset_y);
   y_text.style('font-size', '20px');
   y_text.style('font-family', num_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
 
   x_mark = createElement('p','\u2718');
+  x_mark.parent("content");
   x_mark.style('font-family', button_font.font.names.postScriptName["en"]);
   x_mark.style('color','white');
   x_mark.style('font-weight', 'bold');
@@ -243,16 +250,17 @@ function import_json()
         control_points[i].y = pts[i][1];
 
         point_num.push(createElement('p'));
+        point_num[i].parent('content');
         point_num[i].style('font-size', '18px');
         point_num[i].style('font-family', font.font.names.postScriptName["en"]);
         point_num[i].style('color', 'white');    
         point_num[i].html(i+1);
         point_num[i].style('text-align', 'left');
-        point_num[i].position(NUM_X - 20,(NUM_Y - 15)+i*40);
+        point_num[i].position(0,( - 15)+i*40);
         
         for(let j = 0; j < 2; ++j)
         {
-          text_field_array.push(new TextField(NUM_X + j*80, NUM_Y+i*40));
+          text_field_array.push(new TextField( j*80 + text_offset_x, i*40 + text_offset_y));
           text_field_array[k].set_id_coord(i,j);
           if(j==0)
           { 
@@ -267,7 +275,7 @@ function import_json()
         }
 
       }
-      x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+      x_mark.position(160 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
       x_mark.html('\u2718');
       
 
@@ -300,16 +308,17 @@ function reset_canvas(flag = true)
     control_points.push(new Marker());
     
     point_num.push(createElement('p'));
+    point_num[i].parent('content');
     point_num[i].style('font-size', '18px');
     point_num[i].style('font-family', font.font.names.postScriptName["en"]);
     point_num[i].style('color', 'white');    
     point_num[i].html(i+1);
     point_num[i].style('text-align', 'left');
-    point_num[i].position(NUM_X - 20,(NUM_Y - 15)+i*40);
+    point_num[i].position(0,( - 15)+i*40);
 
     for(let j = 0; j < 2; ++j)
     {
-      text_field_array.push(new TextField(NUM_X + j*80, NUM_Y+i*40));
+      text_field_array.push(new TextField(j*80 + text_offset_x, i*40 + text_offset_y));
       text_field_array[k].set_id_coord(i,j);
       if(j==0)
       { 
@@ -323,7 +332,7 @@ function reset_canvas(flag = true)
       k++;
     }    
   }
-  x_mark.position(NUM_X + 160,(NUM_Y - 12)+(N-1)*40);
+  x_mark.position(160+text_offset_x,( -12)+(N-1)*40 + text_offset_y);
   x_mark.html('\u2718');
   
   noStroke();
@@ -405,4 +414,6 @@ function opentab(evt, curve_name) {
   // document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
   curve_choice = curve_name;
+
+  //document.getElementById("defaultOpen").click();
 }
