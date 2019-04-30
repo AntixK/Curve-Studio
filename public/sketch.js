@@ -1,6 +1,11 @@
+
+var curve;
 var N = 4;
 var curr_marker;
 var control_points = [];
+var curve_points;
+
+var degree = 2;
 
 //UI
 var WIDTH = 720;
@@ -81,6 +86,7 @@ function setup() {
   canvas.mousePressed(click_point);
   canvas.mouseReleased(release_point);
   canvas.doubleClicked(create_point);
+  canvas.mouseWheel(scroll_zoom);
 
   x_text = createP("X");
   x_text.position(NUM_X + 25,NUM_Y-50);
@@ -144,36 +150,9 @@ function setup() {
 
 }
 
-
-function draw_lines()
-{
-  stroke(line_color);
-  strokeWeight(3);
-  for(let i =1; i < control_points.length; ++i)
-  {
-    line(control_points[i-1].x, control_points[i-1].y, control_points[i].x, control_points[i].y);
-  }
-}
-
-function draw_Catmull_Rom()
-{
-  strokeWeight(3.5);
-  stroke(curve_colour);
-  noFill();
-  beginShape();
-  for(let i =0; i<control_points.length; ++i)
-  {
-    curveVertex(control_points[i].x, control_points[i].y);
-  }
-
-  endShape();
-}
-
-
 function draw() 
 {
   background(bg_colour);
-
   scale(zoom);
   
   // if(pan_lock)

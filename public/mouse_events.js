@@ -104,8 +104,8 @@ function delete_point()
   }
 }
 
-function mouseWheel(event) {
-  zoom += sensativity * event.delta;
+function scroll_zoom(event) {
+  zoom += sensativity * event.deltaY;
   zoom = constrain(zoom, 0.05, 5.0);
   zoom_slider.value(zoom*100);
   //uncomment to block page scrolling
@@ -120,4 +120,11 @@ function highlight_x_mark()
 function dehighlight_x_mark()
 {
   x_mark.style('color','white');
+}
+
+function myFunction() {
+  var elmnt = document.getElementById("myDIV");
+  //var x = elmnt.scrollLeft;
+  var y = elmnt.scrollTop;
+  //document.getElementById ("demo").innerHTML = "Horizontally: " + x + "px<br>Vertically: " + y + "px";
 }
