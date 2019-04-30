@@ -49,6 +49,7 @@ let panx = 0;
 let pany = 0;
 let pan_offset_x = 0;
 let pan_offset_y = 0;
+let pan_reset_button;
 
 var tab_handle = 0;
 
@@ -131,6 +132,11 @@ function setup() {
                                     height='45px', width='45px',
                                     font_size='30px',bgc='transparent',radius='30%');
   zoom_reset_button.mousePressed(zoom_reset);
+
+  pan_reset_button = new Button("\u2610", 165,HEIGHT+5, 
+                                    height='45px', width='45px',
+                                    font_size='30px',bgc='transparent',radius='30%');
+  pan_reset_button.mousePressed(pan_reset);
   
   export_button = select("#exportjson");
   export_button.position(WIDTH+150,HEIGHT-50);
@@ -144,21 +150,7 @@ function setup() {
   reset_button.position(WIDTH+20,HEIGHT-120);
   reset_button.mousePressed(reset_canvas);
 
-  // tab_handle =select("#tabs");
-  // tab_handle.position(WIDTH, 0);
-
-  // gg= createFileInput(import_json);
-  // gg.class("mybutton");
-  // gg.style('width', '120px');
-  // gg.style('height', '60px');
-  // gg.style('font-size', '20px');
-  // gg.style('border-radius', '1%');
-  // gg.style('background-color', '#0a3242');
-  // gg.style('color', 'white');
-  // gg.style('border','none');
-  // gg.style('font-family', button_font.font.names.postScriptName["en"]);
-
-  //translate(WIDTH/2, HEIGHT/2);
+  translate(WIDTH/2, HEIGHT/2);
   
 
 }
@@ -174,7 +166,7 @@ function draw()
   //   pan_offset_y = mouseY - pany;
     
   // }
-  // translate(-panx + pan_offset_x, -pany + pan_offset_y);
+  translate(panx, pany);
 
   draw_lines();
   for(let i =0; i < control_points.length; ++i)
@@ -233,6 +225,9 @@ function import_json()
 
       zoom = 1.0;
       zoom_slider.value(zoom*100); 
+      panx = 0;
+      pany = 0;
+
       while(N > 0)
       {
         delete_point();
@@ -289,6 +284,8 @@ function reset_canvas(flag = true)
 {
   zoom = 1.0;
   zoom_slider.value(zoom*100); 
+  panx = 0;
+  pany = 0;
 
   if(flag)
   {
@@ -385,13 +382,14 @@ function create_grid()
   let w = 20*zoom;
   stroke(255);
   strokeWeight(0.2);
-  for(let x=0; x<WIDTH/zoom; x+= w)
+  for(let x=-(WIDTH )/zoom+ panx; x<(WIDTH)/zoom - panx; x+= w)
   {
-    line(x,0, x,HEIGHT/zoom);
-    if(x < HEIGHT/zoom)
-    {
-      line(0,x, WIDTH/zoom,x);
-    }
+    line(x,-(HEIGHT)/zoom+ pany, x,(HEIGHT)/zoom- pany);
+  }
+
+  for(let x=-(HEIGHT)/zoom- pany; x<(HEIGHT)/zoom- pany; x+= w)
+  {
+    line(-(WIDTH)/zoom +  panx,x, (WIDTH )/zoom- panx,x);
   }
 }
 
@@ -399,6 +397,12 @@ function zoom_reset()
 {
   zoom = 1.0;
   zoom_slider.value(zoom*100);
+}
+
+function pan_reset()
+{
+  panx = 0;
+  pany = 0;
 }
 
 function opentab(evt, curve_name) {

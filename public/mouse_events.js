@@ -32,6 +32,12 @@ function mouseDragged()
     update_text_field();
   }
 
+  else if((mouseX)/zoom - panx < WIDTH && (mouseY )/zoom - pany < HEIGHT)
+  {
+    panx = (mouseX/zoom - WIDTH/2*zoom);
+    pany = (mouseY/zoom - HEIGHT/2*zoom);
+  }
+
 }
 
 function release_point() 
@@ -49,8 +55,8 @@ function create_point()
     // create new control points and text field
     control_points.push(new Marker());
     N += 1;
-    control_points[control_points.length - 1].x = mouseX;
-    control_points[control_points.length - 1].y = mouseY;
+    control_points[control_points.length - 1].x = mouseX/zoom - panx;
+    control_points[control_points.length - 1].y = mouseY/zoom - pany;
 
     point_num.push(createElement('p',"num"));
     point_num[N-1].parent('content');

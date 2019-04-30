@@ -13,10 +13,10 @@ class Marker
   check_in_circle()
   {
     if (
-      mouseX/zoom > this.x - this.boxSize &&
-      mouseX/zoom < this.x + this.boxSize &&
-      mouseY/zoom > this.y - this.boxSize &&
-      mouseY/zoom < this.y + this.boxSize
+      (mouseX )/zoom - panx > this.x - this.boxSize &&
+      (mouseX )/zoom - panx < this.x + this.boxSize &&
+      (mouseY)/zoom - pany> this.y - this.boxSize &&
+      (mouseY)/zoom - pany< this.y + this.boxSize
     )
     {
       this.overBox = true;
