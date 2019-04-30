@@ -40,9 +40,23 @@ function draw_bspline()
 
   beginShape();
   for(var t=0; t<1; t+=0.01) {
-    var point = bspline(t, degree, points);
+    var point = bspline(t, degree, curve_points);
     vertex(point[0],point[1]);
   }
   endShape();
 
+}
+
+function draw_curve()
+{
+    switch(curve_choice) {
+        case 'Catmull Rom Spline':
+          draw_Catmull_Rom();
+          break;
+        case 'BSpline':
+          draw_bspline();
+          break;
+        default:
+          draw_Catmull_Rom();
+      } 
 }

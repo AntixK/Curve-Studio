@@ -95,7 +95,12 @@
     /* Change background color of buttons on hover */
     .tab button:hover {
       opacity: 1;
-      margin: -2px 0 0 0;
+      margin: 0 0 0 0;
+    }
+
+    .tab button.active {
+      opacity: 1;
+      margin: -3px 0 0 0;
     }
 
     #my-file{
@@ -130,9 +135,9 @@
     <!-- <a href="#" onmouseover = "this.style.color = '#000'" onmouseout  = "this.style.color = '#f00'">Hi</a> -->
     <p>
       <div class="tab",id="tabs">
-          <button class="tablinks" onclick="" id="defaultOpen">Catmull</button>
-          <button class="tablinks" onclick="">BSpline</button>
-          <button class="tablinks" onclick="">NURBS</button>
+          <button class="tablinks" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
+          <button class="tablinks" onclick="opentab(event, 'BSpline')">BSpline</button>
+          <button class="tablinks" onclick="opentab(event, 'NURBS')">NURBS</button>
       </div>
 
       <!-- <div id="myDIV" onscroll="myFunction()">

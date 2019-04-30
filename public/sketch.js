@@ -1,11 +1,17 @@
 
-var curve;
 var N = 4;
 var curr_marker;
 var control_points = [];
 var curve_points;
+var curve_choice = 'Catmull Rom Spline';
 
 var degree = 2;
+
+var curve_dict = {
+  'Catmull Rom Spline': 0,
+  'BSpline': 1,
+  'NURBS': 2,
+};
 
 //UI
 var WIDTH = 720;
@@ -178,7 +184,7 @@ function draw()
               control_points[i].x-10, control_points[i].y-20);
   }
 
-  draw_Catmull_Rom();
+  draw_curve()
   create_grid();
   
 
@@ -186,7 +192,7 @@ function draw()
 
 function export_json()
 {
-  json_file.curve_type = 'Catmull Rom Spline';
+  json_file.curve_type = curve_choice;
   let control_array = [];
 
   for(let i=0; i<control_points.length;++i)
@@ -206,11 +212,21 @@ function import_json()
     const reader = new FileReader(); 
     reader.onload = function(){      
       in_json_file = JSON.parse(reader.result);
+
+      curve_choice = in_json_file.curve_type;
+
+      // handle tab
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) { 
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      tablinks[curve_dict[curve_choice]].className += " active";
+
       let pts = in_json_file.control_points;
 
       zoom = 1.0;
       zoom_slider.value(zoom*100); 
-      for(let i  =0; i < N;++i)
+      while(N > 0)
       {
         delete_point();
       }
@@ -374,4 +390,19 @@ function zoom_reset()
 {
   zoom = 1.0;
   zoom_slider.value(zoom*100);
+}
+
+function opentab(evt, curve_name) {
+  // var i, tabcontent, tablinks;
+  // tabcontent = document.getElementsByClassName("tabcontent");
+  // for (i = 0; i < tabcontent.length; i++) {
+  //   tabcontent[i].style.display = "none";
+  // }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  // document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+  curve_choice = curve_name;
 }
