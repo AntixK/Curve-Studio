@@ -58,8 +58,8 @@ var tab_content;
 //Data fields
 let x_text;
 let y_text;
+let w_text;
 let x_mark;
-var point_num = [];
 var curr_point_id = 0;
 var text_field_array = []
 var text_offset_x = 25;
@@ -102,16 +102,22 @@ function setup() {
   tab_content.position(NUM_X, NUM_Y);
 
   x_text = createP("X");
-  x_text.position(NUM_X + 25 + text_offset_x,NUM_Y-50+text_offset_y);
+  x_text.position(NUM_X + 30 + text_offset_x,NUM_Y-50+text_offset_y);
   x_text.style('font-size', '20px');
-  x_text.style('font-family', num_font.font.names.postScriptName["en"]);
+  x_text.style('font-family', button_font.font.names.postScriptName["en"]);
   x_text.style('color', 'white');
 
   y_text = createP("Y");
-  y_text.position(NUM_X +105 + text_offset_x,NUM_Y-50 + text_offset_y);
+  y_text.position(NUM_X +115 + text_offset_x,NUM_Y-50 + text_offset_y);
   y_text.style('font-size', '20px');
-  y_text.style('font-family', num_font.font.names.postScriptName["en"]);
+  y_text.style('font-family', button_font.font.names.postScriptName["en"]);
   y_text.style('color', 'white');
+
+  w_text = createP("W");
+  w_text.position(NUM_X +195 + text_offset_x,NUM_Y-50 + text_offset_y);
+  w_text.style('font-size', '20px');
+  w_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  w_text.style('color', 'white');
 
   x_mark = createElement('p','\u2718');
   x_mark.parent("content");
@@ -243,34 +249,14 @@ function import_json()
         control_points.push(new Marker());
         control_points[i].x = pts[i][0];
         control_points[i].y = pts[i][1];
-
-        point_num.push(createElement('p'));
-        point_num[i].parent('content');
-        point_num[i].style('font-size', '18px');
-        point_num[i].style('font-family', font.font.names.postScriptName["en"]);
-        point_num[i].style('color', 'white');    
-        point_num[i].html(i+1);
-        point_num[i].style('text-align', 'left');
-        point_num[i].position(0,( - 15)+i*40);
         
-        for(let j = 0; j < 2; ++j)
-        {
-          text_field_array.push(new TextField( j*80 + text_offset_x, i*40 + text_offset_y));
-          text_field_array[k].set_id_coord(i,j);
-          if(j==0)
-          { 
-            text_field_array[k].set_val(control_points[i].x.toFixed(2));
-          }
-          else
-          {
-            text_field_array[k].set_val(control_points[i].y.toFixed(2));
-          }
-
-          k++;
-        }
+        text_field_array.push(new TextField(text_offset_x, i*40 + text_offset_y, i+1));
+        text_field_array[k].set_id_coord(i,0);
+        text_field_array[k].set_val(control_points[i].x.toFixed(2),control_points[i].y.toFixed(2));
+        k++;
 
       }
-      x_mark.position(160 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
+      x_mark.position(240 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
       x_mark.html('\u2718');
       
 
@@ -303,33 +289,14 @@ function reset_canvas(flag = true)
   for(let i =0; i<N; ++i)
   {
     control_points.push(new Marker());
-    
-    point_num.push(createElement('p'));
-    point_num[i].parent('content');
-    point_num[i].style('font-size', '18px');
-    point_num[i].style('font-family', font.font.names.postScriptName["en"]);
-    point_num[i].style('color', 'white');    
-    point_num[i].html(i+1);
-    point_num[i].style('text-align', 'left');
-    point_num[i].position(0,( - 15)+i*40);
 
-    for(let j = 0; j < 2; ++j)
-    {
-      text_field_array.push(new TextField(j*80 + text_offset_x, i*40 + text_offset_y));
-      text_field_array[k].set_id_coord(i,j);
-      if(j==0)
-      { 
-        text_field_array[k].set_val(control_points[i].x.toFixed(2));
-      }
-      else
-      {
-        text_field_array[k].set_val(control_points[i].y.toFixed(2));
-      }
-
-      k++;
-    }    
+    text_field_array.push(new TextField(text_offset_x, i*40 + text_offset_y, i+1));
+    text_field_array[k].set_id_coord(i,0);
+    text_field_array[k].set_val(control_points[i].x.toFixed(2),control_points[i].y.toFixed(2));
+    k++;
+       
   }
-  x_mark.position(160+text_offset_x,( -12)+(N-1)*40 + text_offset_y);
+  x_mark.position(240+text_offset_x,( -12)+(N-1)*40 + text_offset_y);
   x_mark.html('\u2718');
   
   noStroke();
@@ -339,36 +306,19 @@ function update_control_pts()
 {
   for(let k =0; k<text_field_array.length; ++k)
   {
-    if(text_field_array[k].coord == 0)
-    {
-      control_points[text_field_array[k].id].x = text_field_array[k].get_val();
-    }
-    else
-    {
-      control_points[text_field_array[k].id].y = text_field_array[k].get_val();
-    }
+    let temp = text_field_array[k].get_val();
+    control_points[text_field_array[k].id].x = temp[0];
+    control_points[text_field_array[k].id].y = temp[1];
   }
 }
 
 function update_text_field()
 {
-  let k = 0;
-  for(let i =0; i<N; ++i)
-  {
-    for(let j = 0; j < 2; ++j)
-    {
-      if(j==0)
-      { 
-        text_field_array[k].set_val(control_points[i].x.toFixed(2));
-      }
-      else
-      {
-        text_field_array[k].set_val(control_points[i].y.toFixed(2));
-      }
-      k++;
-    }    
-  }
 
+  for(let i =0; i<N; ++i)
+  { 
+    text_field_array[i].set_val(control_points[i].x.toFixed(2),control_points[i].y.toFixed(2));   
+  }
 }
 
 
@@ -415,9 +365,7 @@ function opentab(evt, curve_name) {
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
-  // document.getElementById(cityName).style.display = "block";
+
   evt.currentTarget.className += " active";
   curve_choice = curve_name;
-
-  //document.getElementById("defaultOpen").click();
 }

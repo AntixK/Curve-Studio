@@ -8,7 +8,7 @@ function click_point()
       locked = true;
       pan_lock=false;
       curr_point_id = i;
-      point_num[i].style('color', '#FD971F');
+      text_field_array[i].highlight_ind();
       curr_marker.xOffset = mouseX - curr_marker.x;
       curr_marker.yOffset = mouseY - curr_marker.y;     
       break;
@@ -45,7 +45,7 @@ function release_point()
   locked = false;
   pan_lock = false;
   curr_marker.boxSize = 15;
-  point_num[curr_point_id].style('color', 'white');  
+  text_field_array[curr_point_id].dehighlight_ind();
 }
 
 function create_point() 
@@ -57,27 +57,13 @@ function create_point()
     N += 1;
     control_points[control_points.length - 1].x = mouseX/zoom - panx;
     control_points[control_points.length - 1].y = mouseY/zoom - pany;
-
-    point_num.push(createElement('p',"num"));
-    point_num[N-1].parent('content');
-    point_num[N-1].style('font-size', '18px');
-    point_num[N-1].style('font-family', font.font.names.postScriptName["en"]);
-    point_num[N-1].style('color', 'white');    
-    point_num[N-1].html(N);
-    point_num[N-1].style('text-align', 'left');
-    point_num[N-1].position(0,( - 15)+(N-1)*40);
-
-    text_field_array.push(new TextField(0+text_offset_x, (N-1)*40 + text_offset_y));
+    
+    text_field_array.push(new TextField(text_offset_x, (N-1)*40 + text_offset_y, N));
     k = text_field_array.length-1;
     text_field_array[k].set_id_coord(N-1,0);
-    text_field_array[k].set_val(control_points[N-1].x.toFixed(2));    
-    
-    text_field_array.push(new TextField(80 + text_offset_x, (N-1)*40 + text_offset_y));
-    k = text_field_array.length-1;
-    text_field_array[k].set_id_coord(N-1,1);
-    text_field_array[k].set_val(control_points[N-1].y.toFixed(2));
+    text_field_array[k].set_val(control_points[N-1].x.toFixed(2),control_points[N-1].y.toFixed(2));
 
-    x_mark.position( 160+text_offset_x,(- 12)+(N-1)*40+text_offset_y);
+    x_mark.position( 240+text_offset_x,(- 12)+(N-1)*40+text_offset_y);
     if(x_mark.html() == "")
     {
       x_mark.html('\u2718');
@@ -93,17 +79,12 @@ function delete_point()
   text_field_array[k].remove_field();
   text_field_array.pop();
 
-  text_field_array[k-1].remove_field();
-  text_field_array.pop();
-
-  point_num[N-1].html('');
-  point_num.pop();
   control_points.pop();
 
   N -= 1;
   if(N >1)
   { 
-    x_mark.position(160+text_offset_x,( - 12)+(N-1)*40+text_offset_y);
+    x_mark.position(240+text_offset_x,( - 12)+(N-1)*40+text_offset_y);
   }
   else
   {
@@ -132,6 +113,6 @@ function dehighlight_x_mark()
 function myFunction() {
   var elmnt = document.getElementById("myDIV");
   //var x = elmnt.scrollLeft;
-  var y = elmnt.scrollTop;
+  //var y = elmnt.scrollTop;
   //document.getElementById ("demo").innerHTML = "Horizontally: " + x + "px<br>Vertically: " + y + "px";
 }

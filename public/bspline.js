@@ -1,4 +1,4 @@
-function bspline(t, degree, points, knots, weights, result) 
+function bspline(t, degree, points, weights, knots, result) 
 {
 
   var i,j,s,l;              // function-scoped iteration variables
