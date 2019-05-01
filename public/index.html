@@ -172,9 +172,9 @@
     <!-- <a href="#" onmouseover = "this.style.color = '#000'" onmouseout  = "this.style.color = '#f00'">Hi</a> -->
     <p>
       <div class="tab",id="tabs">
-          <button class="tablinks active" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
-          <button class="tablinks" onclick="opentab(event, 'BSpline')">BSpline</button>
-          <button class="tablinks" onclick="opentab(event, 'NURBS')">NURBS</button>
+          <button title="Design Catmull-Rom curve" class="tablinks active" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
+          <button title="Design BSpline curve" class="tablinks" onclick="opentab(event, 'BSpline')">BSpline</button>
+          <button title="Design NURBS curve" class="tablinks" onclick="opentab(event, 'NURBS')">NURBS</button>
       </div>
       
       <div id="tab_highlight"></div>
@@ -184,10 +184,10 @@
       </div>
 
       <input type="file" name="my_file" id="my-file">
-      <input type="button" class="mybutton" onclick="import_json()" value="Import JSON" id="importjson">
+      <input title="Import curve data from a JSON file." type="button" class="mybutton" onclick="import_json()" value="Import JSON" id="importjson">
       
-      <button class = "mybutton" id='exportjson'>Export JSON</button>
-      <button class = "mybutton" id='reset'>Reset</button>
+      <button title="Exports all the curve data as a JSON file." class = "mybutton" id='exportjson'>Export JSON</button>
+      <button title="Resets the canvas." class = "mybutton" id='reset'>Reset</button>
       <input type="range" min="70" max="200" value="100"  step='1' class="myslider" id="zoomslider">
     </p>
 

@@ -2,10 +2,12 @@ function draw_lines()
 {
   stroke(line_color);
   strokeWeight(3);
+  drawingContext.setLineDash([15, 15]);
   for(let i =1; i < control_points.length; ++i)
   {
     line(control_points[i-1].x, control_points[i-1].y, control_points[i].x, control_points[i].y);
   }
+  drawingContext.setLineDash([]);
 }
 
 function draw_Catmull_Rom()

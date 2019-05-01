@@ -31,6 +31,8 @@ let num_font;
 let NUM_X = WIDTH+20;
 let NUM_Y = 120;
 
+var mouse_pos;
+
 
 //Interactivity
 let locked = false;
@@ -97,6 +99,7 @@ function setup() {
   canvas.mouseReleased(release_point);
   canvas.doubleClicked(create_point);
   canvas.mouseWheel(scroll_zoom);
+  
 
   tab_content = select("#myDIV");
   tab_content.position(NUM_X, NUM_Y);
@@ -118,6 +121,12 @@ function setup() {
   w_text.style('font-size', '20px');
   w_text.style('font-family', button_font.font.names.postScriptName["en"]);
   w_text.style('color', 'white');
+  
+  mouse_pos = createP("");
+  mouse_pos.position(WIDTH - 125- text_offset_x,HEIGHT + text_offset_y);
+  mouse_pos.style('font-size', '18px');
+  mouse_pos.style('font-family', num_font.font.names.postScriptName["en"]);
+  mouse_pos.style('color', 'white');
 
   x_mark = createElement('p','\u2718');
   x_mark.parent("content");
@@ -156,8 +165,7 @@ function setup() {
   reset_button.position(WIDTH+20,HEIGHT-120);
   reset_button.mousePressed(reset_canvas);
 
-  translate(WIDTH/2, HEIGHT/2);
-  
+  //translate(WIDTH/2, HEIGHT/2);  
 
 }
 
@@ -172,6 +180,7 @@ function draw()
   //   pan_offset_y = mouseY - pany;
     
   // }
+  
   translate(panx, pany);
 
   draw_lines();
@@ -190,8 +199,8 @@ function draw()
   }
 
   draw_curve()
-  create_grid();
-  
+  create_grid(); 
+  update_mouse_pos();
 
 }
 
@@ -329,7 +338,7 @@ function update_zoom()
 
 function create_grid()
 {
-  let w = 20*zoom;
+  let w = 20/zoom;
   stroke(255);
   strokeWeight(0.2);
   for(let x=-(WIDTH )/zoom+ panx; x<(WIDTH)/zoom - panx; x+= w)

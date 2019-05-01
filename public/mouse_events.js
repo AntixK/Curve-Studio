@@ -18,8 +18,13 @@ function click_point()
     {
       locked = false;
       pan_lock = true;
+
+      pan_offset_x = panx;
+      pan_offset_y = pany;
     }
   }
+
+  
   
   
 }
@@ -32,10 +37,10 @@ function mouseDragged()
     update_text_field();
   }
 
-  else if((mouseX)/zoom - panx < WIDTH && (mouseY )/zoom - pany < HEIGHT)
-  {
-    panx = (mouseX/zoom - WIDTH/2*zoom);
-    pany = (mouseY/zoom - HEIGHT/2*zoom);
+  else if((mouseX)/zoom - panx < WIDTH -panx && (mouseY )/zoom - pany < HEIGHT -pany)
+  { 
+    panx = (mouseX/zoom - pan_offset_x - WIDTH/2*zoom);
+    pany = (mouseY/zoom - pan_offset_y - HEIGHT/2*zoom);    
   }
 
 }
@@ -115,4 +120,13 @@ function myFunction() {
   //var x = elmnt.scrollLeft;
   //var y = elmnt.scrollTop;
   //document.getElementById ("demo").innerHTML = "Horizontally: " + x + "px<br>Vertically: " + y + "px";
+}
+
+function update_mouse_pos()
+{
+  if((mouseX)/zoom - panx < WIDTH -panx && (mouseY )/zoom - pany < HEIGHT -pany)
+  {
+    mouse_pos.html("("+ ((mouseX)/zoom - panx).toFixed(2) + ","+ ((mouseY )/zoom - pany).toFixed(2) +")");
+  }
+  
 }

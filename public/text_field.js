@@ -2,29 +2,34 @@ class TextField
 {
     constructor(posx, posy, index)
     {        
-        this.textfield_x = createInput('','Number');
+        this.textfield_x = createInput('','Number'); 
+        this.textfield_x.attribute('step', '1.00');       
         this.textfield_x.style('width','70px');
         this.textfield_x.style('height','20px');
         this.textfield_x.style('font-family', num_font.font.names.postScriptName["en"]);
         this.textfield_x.parent('content');
         this.textfield_x.position(posx, posy);
-        this.textfield_x.changed(update_control_pts);
+        this.textfield_x.input(update_control_pts);
 
         this.textfield_y = createInput('','Number');
+        this.textfield_y.attribute('step', '1.00');
         this.textfield_y.style('width','70px');
         this.textfield_y.style('height','20px');
         this.textfield_y.style('font-family', num_font.font.names.postScriptName["en"]);
         this.textfield_y.parent('content');
         this.textfield_y.position(posx+80, posy);
-        this.textfield_y.changed(update_control_pts);
+        this.textfield_y.input(update_control_pts);
 
         this.textfield_w = createInput('','Number');
+        this.textfield_w.attribute('step', '0.01');
+        this.textfield_w.attribute('min', '0.0');
+        this.textfield_w.attribute('max', '1.0');
         this.textfield_w.style('width','70px');
         this.textfield_w.style('height','20px');
         this.textfield_w.style('font-family', num_font.font.names.postScriptName["en"]);
         this.textfield_w.parent('content');
         this.textfield_w.position(posx+160, posy);
-        this.textfield_w.changed(update_control_pts);
+        this.textfield_w.input(update_control_pts);
         this.set_w_val(random(1).toFixed(2));
 
         this.pt_ind = createElement('p',"num");
@@ -73,11 +78,10 @@ class TextField
 
     remove_field()
     {
-        this.textfield_x.style('opacity','0');
-        this.textfield_y.style('opacity','0');
-        this.textfield_w.style('opacity','0');
-
-        this.pt_ind.html('');
+        this.textfield_x.remove();
+        this.textfield_y.remove();
+        this.textfield_w.remove();
+        this.pt_ind.remove();
     }
 
     highlight_ind()
