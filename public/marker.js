@@ -4,6 +4,7 @@ class Marker
   {
     this.x = 30 + random(WIDTH-50)
     this.y = 30 + random(HEIGHT-50)
+    this.dimension = 2;
     this.xOffset = 0;
     this.yOffset = 0;
     this.boxSize = 15;

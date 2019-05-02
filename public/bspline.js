@@ -3,7 +3,7 @@ function bspline(t, degree, points, weights, knots, result)
 
   var i,j,s,l;              // function-scoped iteration variables
   var n = points.length;    // points count
-  var d = points[0].length; // point dimensionality
+  var d = points[0].dimension; // point dimensionality
 
   if(degree < 1) throw new Error('degree must be at least 1 (linear)');
   if(degree > (n-1)) throw new Error('degree must be less than or equal to point count - 1');
@@ -49,9 +49,10 @@ function bspline(t, degree, points, weights, knots, result)
   var v = [];
   for(i=0; i<n; i++) {
     v[i] = [];
-    for(j=0; j<d; j++) {
-      v[i][j] = points[i][j] * weights[i];
-    }
+
+    v[i][0] = points[i].x * weights[i];
+    v[i][1] = points[i].y * weights[i];
+
     v[i][d] = weights[i];
   }
 
@@ -61,7 +62,7 @@ function bspline(t, degree, points, weights, knots, result)
     // build level l of the pyramid
     for(i=s; i>s-degree-1+l; i--) {
       alpha = (t - knots[i]) / (knots[i+degree+1-l] - knots[i]);
-
+      
       // interpolate each component
       for(j=0; j<d+1; j++) {
         v[i][j] = (1 - alpha) * v[i-1][j] + alpha * v[i][j];

@@ -31,21 +31,16 @@ function draw_bspline()
   stroke(curve_colour);
   noFill();
   
-  curve_points = [];
   let w = [];
   for(let i = 0; i<N; ++i)
   {
-    curve_points[i] = [];
-    curve_points[i][0] = control_points[i].x;
-    curve_points[i][1] = control_points[i].y;
-
     w[i] = text_field_array[i].get_w();
 
   } 
 
   beginShape();
   for(var t=0; t<1; t+=0.01) {
-    var point = bspline(t, degree, curve_points, w);
+    var point = bspline(t, degree, control_points, w);
     vertex(point[0],point[1]);
   }
   endShape();

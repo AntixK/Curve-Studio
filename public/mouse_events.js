@@ -9,8 +9,8 @@ function click_point()
       pan_lock=false;
       curr_point_id = i;
       text_field_array[i].highlight_ind();
-      curr_marker.xOffset = mouseX - curr_marker.x;
-      curr_marker.yOffset = mouseY - curr_marker.y;     
+      curr_marker.xOffset = mouseX/zoom - curr_marker.x;
+      curr_marker.yOffset = mouseY/zoom - curr_marker.y;     
       break;
       //fill(244, 122, 158);
     }
@@ -19,28 +19,25 @@ function click_point()
       locked = false;
       pan_lock = true;
 
-      pan_offset_x = panx;
-      pan_offset_y = pany;
+      pan_offset_x = mouseX/zoom - panx;
+      pan_offset_y = mouseY/zoom - pany;
     }
-  }
-
-  
-  
+  } 
   
 }
 
 function mouseDragged() 
 {
   if (locked) {    
-    curr_marker.x = mouseX - curr_marker.xOffset;
-    curr_marker.y = mouseY - curr_marker.yOffset;
+    curr_marker.x = mouseX/zoom - curr_marker.xOffset;
+    curr_marker.y = mouseY/zoom - curr_marker.yOffset;
     update_text_field();
   }
 
   else if((mouseX)/zoom - panx < WIDTH -panx && (mouseY )/zoom - pany < HEIGHT -pany)
   { 
-    panx = (mouseX/zoom - pan_offset_x - WIDTH/2*zoom);
-    pany = (mouseY/zoom - pan_offset_y - HEIGHT/2*zoom);    
+    panx = (mouseX/zoom - pan_offset_x);
+    pany = (mouseY/zoom - pan_offset_y);    
   }
 
 }
@@ -55,7 +52,7 @@ function release_point()
 
 function create_point() 
 {
-  if(N < 10)
+  if(N < MAX_NUM_PTS)
   {
     // create new control points and text field
     control_points.push(new Marker());
@@ -73,7 +70,8 @@ function create_point()
     {
       x_mark.html('\u2718');
     }   
-
+  
+    degree_slider.attribute('max',(N -1).toString());
   }
 
 }
@@ -87,7 +85,12 @@ function delete_point()
   control_points.pop();
 
   N -= 1;
-  if(N >1)
+
+  if(N >1 && curve_choice =='Catmull Rom Spline')
+  { 
+    x_mark.position(240+text_offset_x,( - 12)+(N-1)*40+text_offset_y);
+  }
+  else if(N >2 && curve_choice !='Catmull Rom Spline')
   { 
     x_mark.position(240+text_offset_x,( - 12)+(N-1)*40+text_offset_y);
   }
@@ -95,6 +98,13 @@ function delete_point()
   {
     x_mark.html('');
   }
+
+  if(degree > N-1)
+  {
+    degree--;
+    degree_slider.value(degree);
+  }
+  degree_slider.attribute('max',(N -1).toString());
 }
 
 function scroll_zoom(event) {

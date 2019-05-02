@@ -1,11 +1,12 @@
-
-var N = 4;
+var INITIAL_NUM_PTS = 5;
+var N = INITIAL_NUM_PTS;
+var MAX_NUM_PTS = 10;
 var curr_marker;
 var control_points = [];
 var curve_points;
 var curve_choice = 'Catmull Rom Spline';
-
 var degree = 2;
+var degree_slider;
 
 var curve_dict = {
   'Catmull Rom Spline': 0,
@@ -29,7 +30,7 @@ let button_font;
 let num_font;
 
 let NUM_X = WIDTH+20;
-let NUM_Y = 120;
+let NUM_Y = 155;
 
 var mouse_pos;
 
@@ -61,6 +62,7 @@ var tab_content;
 let x_text;
 let y_text;
 let w_text;
+let degree_text;
 let x_mark;
 var curr_point_id = 0;
 var text_field_array = []
@@ -92,6 +94,7 @@ function setup() {
   zoom_slider.position(10, HEIGHT + 22);
   zoom_slider.input(update_zoom);
 
+
   curr_marker = new Marker();
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("sketchHolder");
@@ -121,6 +124,12 @@ function setup() {
   w_text.style('font-size', '20px');
   w_text.style('font-family', button_font.font.names.postScriptName["en"]);
   w_text.style('color', 'white');
+
+  degree_text = createP("Degree");
+  degree_text.position(NUM_X +30 + text_offset_x, NUM_Y-85);
+  degree_text.style('font-size', '20px');
+  degree_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  degree_text.style('color', 'white');
   
   mouse_pos = createP("");
   mouse_pos.position(WIDTH - 125- text_offset_x,HEIGHT + text_offset_y);
@@ -137,6 +146,13 @@ function setup() {
   x_mark.mouseOut(dehighlight_x_mark);
   x_mark.mouseClicked(delete_point);
   
+  degree_slider = createInput('2','Number'); 
+  degree_slider.style('width','70px');
+  degree_slider.style('text-align','center');
+  degree_slider.attribute('min', '1');
+  degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
+  degree_slider.position(NUM_X + 140, NUM_Y - 65);
+  degree_slider.changed(update_degree);
 
   reset_canvas(false);
 
@@ -165,24 +181,18 @@ function setup() {
   reset_button.position(WIDTH+20,HEIGHT-120);
   reset_button.mousePressed(reset_canvas);
 
-  //translate(WIDTH/2, HEIGHT/2);  
+  translate(WIDTH/2, HEIGHT/2);  
 
 }
 
+let angle = 0;
 function draw() 
 {
   background(bg_colour);
   scale(zoom);
   
-  // if(pan_lock)
-  // {
-  //   pan_offset_x = mouseX - panx;
-  //   pan_offset_y = mouseY - pany;
-    
-  // }
-  
   translate(panx, pany);
-
+  //rotateY(angle);
   draw_lines();
   for(let i =0; i < control_points.length; ++i)
   {
@@ -197,24 +207,26 @@ function draw()
     text("("+(control_points[i].x).toFixed() + ","+(control_points[i].y).toFixed()+")", 
               control_points[i].x-10, control_points[i].y-20);
   }
-
+  
   draw_curve()
   create_grid(); 
   update_mouse_pos();
-
+  angle += 0.02;
 }
 
 function export_json()
 {
   json_file.curve_type = curve_choice;
   let control_array = [];
-
+  let weights = [];
   for(let i=0; i<control_points.length;++i)
   {
     let arr = [control_points[i].x, control_points[i].y]
     control_array.push(arr);
+    weights[i] = text_field_array[i].get_w();
   }
   json_file.control_points = control_array;
+  json_file.weights = weights;
   saveJSON(json_file, json_file.curve_type+".json");
 }
 
@@ -237,6 +249,7 @@ function import_json()
       tablinks[curve_dict[curve_choice]].className += " active";
 
       let pts = in_json_file.control_points;
+      let weights = in_json_file.weights;
 
       zoom = 1.0;
       zoom_slider.value(zoom*100); 
@@ -248,11 +261,13 @@ function import_json()
         delete_point();
       }
     
-      control_points = []
-      text_field_array = []
+      control_points = [];
+      text_field_array = [];
+           
       N = pts.length;
       
-      let k = 0;
+      let k = 0;   
+
       for(let i = 0;i<pts.length;++i)
       {
         control_points.push(new Marker());
@@ -262,8 +277,9 @@ function import_json()
         text_field_array.push(new TextField(text_offset_x, i*40 + text_offset_y, i+1));
         text_field_array[k].set_id_coord(i,0);
         text_field_array[k].set_val(control_points[i].x.toFixed(2),control_points[i].y.toFixed(2));
-        k++;
+        text_field_array[k].set_w_val(weights[i]);
 
+        k++;
       }
       x_mark.position(240 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
       x_mark.html('\u2718');
@@ -281,6 +297,8 @@ function reset_canvas(flag = true)
   zoom_slider.value(zoom*100); 
   panx = 0;
   pany = 0;
+  degree =2;
+  degree_slider.value(degree);
 
   if(flag)
   {
@@ -294,7 +312,7 @@ function reset_canvas(flag = true)
   text_field_array = []
   
   let k = 0;
-  N = 4;
+  N = INITIAL_NUM_PTS;
   for(let i =0; i<N; ++i)
   {
     control_points.push(new Marker());
@@ -341,14 +359,14 @@ function create_grid()
   let w = 20/zoom;
   stroke(255);
   strokeWeight(0.2);
-  for(let x=-(WIDTH )/zoom+ panx; x<(WIDTH)/zoom - panx; x+= w)
+  for(let x=-panx; x<(WIDTH)/zoom - panx; x+= w)
   {
-    line(x,-(HEIGHT)/zoom+ pany, x,(HEIGHT)/zoom- pany);
+    line(x,-(HEIGHT)/zoom- pany, x,(HEIGHT)/zoom- pany);
   }
 
-  for(let x=-(HEIGHT)/zoom- pany; x<(HEIGHT)/zoom- pany; x+= w)
+  for(let x=-pany; x<(HEIGHT)/zoom- pany; x+= w)
   {
-    line(-(WIDTH)/zoom +  panx,x, (WIDTH )/zoom- panx,x);
+    line(-(WIDTH)/zoom -    panx,x, (WIDTH )/zoom- panx,x);
   }
 }
 
@@ -377,4 +395,10 @@ function opentab(evt, curve_name) {
 
   evt.currentTarget.className += " active";
   curve_choice = curve_name;
+}
+
+function update_degree()
+{ 
+
+  degree = Number(degree_slider.value());
 }
