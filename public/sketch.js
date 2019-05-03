@@ -10,7 +10,7 @@ var degree_slider;
 
 var curve_dict = {
   'Catmull Rom Spline': 0,
-  'BSpline': 1,
+  'Bezier': 1,
   'NURBS': 2,
 };
 
@@ -74,7 +74,6 @@ var text_offset_y = 0;
 let json_file = {};
 let in_json_file;
 var file_handle;
-//var bspline = require('b-spline');
 
 function preload() {
   font = loadFont('assets/MontserratAlternates-SemiBold.otf');

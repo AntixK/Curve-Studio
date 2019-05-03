@@ -25,7 +25,7 @@ function draw_Catmull_Rom()
 
 }
 
-function draw_bspline()
+function draw_nurbs()
 {
   strokeWeight(3.5);
   stroke(curve_colour);
@@ -40,7 +40,22 @@ function draw_bspline()
 
   beginShape();
   for(var t=0; t<1; t+=0.01) {
-    var point = bspline(t, degree, control_points, w);
+    var point = nurbs(t, degree, control_points, w);
+    vertex(point[0],point[1]);
+  }
+  endShape();
+
+}
+
+function draw_bezier()
+{
+  strokeWeight(3.5);
+  stroke(curve_colour);
+  noFill();
+
+  beginShape();
+  for(var t=0; t<1; t+=0.01) {
+    var point = bezier_spline(t, control_points);
     vertex(point[0],point[1]);
   }
   endShape();
@@ -53,11 +68,11 @@ function draw_curve()
         case 'Catmull Rom Spline':
           draw_Catmull_Rom();
           break;
-        case 'BSpline':
-          draw_bspline();
+        case 'Bezier':
+          draw_bezier();
           break;
         case 'NURBS':
-          draw_bspline();
+          draw_nurbs();
           break;
         default:
           draw_Catmull_Rom();
