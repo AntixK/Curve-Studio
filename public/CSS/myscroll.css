@@ -1,0 +1,34 @@
+   /*Tab content and divider for scrolling*/
+
+    #myDIV {
+    height: 195px;
+    width: 310px;
+    overflow: auto;
+    }
+
+    #content {
+
+    position: absolute;
+    }
+
+    .scroll {
+      width: 20px;
+      height: 195px;
+      overflow: auto;
+      float: left;
+      margin: 0 10px;
+    }
+
+    .scroll::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    .scroll::-webkit-scrollbar-thumb {
+      background: #336b87;
+      border-radius: 20px;
+    }
+
+    .scroll::-webkit-scrollbar-track {
+      background: #ddd;
+      border-radius: 20px;
+    }

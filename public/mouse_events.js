@@ -109,10 +109,14 @@ function delete_point()
 
 function scroll_zoom(event) {
   zoom += sensativity * event.deltaY;
-  zoom = constrain(zoom, 0.05, 5.0);
+  
+  if(zoom >= 0.5 && zoom < 2.0 )
+  { 
+    panx -= (mouseX/zoom)*(sensativity *event.deltaY);
+    pany -= (mouseY/zoom)*(sensativity *event.deltaY);
+  }
+  zoom = constrain(zoom, 0.5, 2.0);
   zoom_slider.value(zoom*100);
-  panx -= (mouseX/zoom)*(sensativity *event.deltaY);
-  pany -= (mouseY/zoom)*(sensativity *event.deltaY);
 
   //uncomment to block page scrolling
   return false;
@@ -137,7 +141,7 @@ function myFunction() {
 
 function update_mouse_pos()
 {
-  if((mouseX)/zoom - panx < WIDTH -panx && (mouseY )/zoom - pany < HEIGHT -pany)
+  if((mouseX)/zoom < WIDTH/zoom && (mouseY )/zoom < HEIGHT/zoom)
   {
     mouse_pos.html("("+ ((mouseX)/zoom - panx).toFixed(2) + ","+ ((mouseY )/zoom - pany).toFixed(2) +")");
   }

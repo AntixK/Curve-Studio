@@ -152,11 +152,20 @@ function setup() {
   degree_slider.style('text-align','center');
   degree_slider.attribute('min', '1');
   degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
-  degree_slider.position(NUM_X + 100, NUM_Y - 65);
+  degree_slider.position(NUM_X + 90, NUM_Y - 65);
   degree_slider.changed(update_degree);
 
-  clamped_box = createCheckbox('Clamped', clamped_curve);
-  clamped_box.position(NUM_X + 240, NUM_Y - 65);
+  let clamp_text = createP("Clamp");
+  clamp_text.position(NUM_X +190 + text_offset_x, NUM_Y-85);
+  clamp_text.style('font-size', '20px');
+  clamp_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  clamp_text.style('color', 'white');
+
+  clamped_box = select("#clampedbox");
+  clamped_box.style('font-size', '20px');
+  clamped_box.style('font-family', button_font.font.names.postScriptName["en"]);
+  clamped_box.style('color', 'white');
+  clamped_box.position(NUM_X + 180, NUM_Y - 68);
   clamped_box.changed(set_clamped);
 
   reset_canvas(false);
@@ -232,6 +241,8 @@ function export_json()
   }
   json_file.control_points = control_array;
   json_file.weights = weights;
+  json_file.clamped = clamped_curve;
+  json_file.degree = degree;
   saveJSON(json_file, json_file.curve_type+".json");
 }
 
@@ -285,11 +296,15 @@ function import_json()
         text_field_array[k].set_w_val(weights[i]);
 
         k++;
-      }
+      }      
+
       x_mark.position(240 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
       x_mark.html('\u2718');
-      
 
+      clamped_curve = in_json_file.clamped;
+      degree = in_json_file.degree;
+      update_degree_slider();
+      update_clamped_box();
     }
     reader.readAsText(file_handle.files[0]);
   }, false);   
@@ -303,7 +318,7 @@ function reset_canvas(flag = true)
   panx = 0;
   pany = 0;
     
-
+  clamped_curve = false;
   if(flag)
   {
     while(N > 0)
@@ -335,7 +350,9 @@ function reset_canvas(flag = true)
   degree_slider.attribute('min', '1');
   degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
   degree =2;
-  degree_slider.value(degree);
+  update_degree_slider();
+  update_clamped_box();
+
 }
 
 function update_control_pts()
@@ -414,12 +431,19 @@ function update_degree()
 
 function set_clamped()
 {
-  if(this.checked())
-  {
-    clamped_curve=true;
-  }
-  else
-  {
-    clamped_curve = false;
-  }
+
+  clamped_box.value(!clamped_curve);
+  clamped_curve = !clamped_curve;
+}
+
+function update_degree_slider()
+{
+  degree_slider.value(degree);
+}
+
+function update_clamped_box()
+{
+  clamped_box.value(clamped_curve);
+  document.getElementById("clampedbox").checked = clamped_curve;
+  
 }

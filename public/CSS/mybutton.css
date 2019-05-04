@@ -1,0 +1,23 @@
+.mybutton {
+    background-color: #336b87; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 22px;
+    opacity: 0.7;
+    transition: 0.3s;
+    font-family: 'VarelaRound';
+    cursor: pointer;
+    border-radius:5%;
+    width:120px;
+    height:60px;
+    font-variant: small-caps;
+    white-space: normal;
+}
+.mybutton:hover {
+    opacity: 1;
+    margin: -3px 0 0 0;
+} 

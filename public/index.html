@@ -2,159 +2,30 @@
 <html>
 
   <head>
-    <style>
-      .mybutton {
-        background-color: #336b87; /* Green */
-        border: none;
-        color: white;
-        padding: 5px 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 20px;
-        opacity: 0.7;
-        transition: 0.3s;
-        font-family: 'VarelaRound';
-        cursor: pointer;
-        border-radius:5%;
-        width:120px;
-        height:60px;
-        font-variant: small-caps;
-        white-space: normal;
-      }
-    .mybutton:hover {
-      opacity: 1;
-      margin: -3px 0 0 0;
-      }  
-    
-
-
-    .myslider {
-      -webkit-appearance: none;
-      width: 120px;
-      height: 5px;
-      background: #0a3242;
-      outline: none;
-      opacity: 0.7;
-      -webkit-transition: .2s;
-      transition: opacity .2s;
-    }
-
-    .myslider:hover {
-      opacity: 1;
-      
-    }
-
-    .myslider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      background: #1c86af;
-      cursor: pointer;
-      border-radius:50%;
-    }
-
-    /* Style the tab */
-    .tab {
-      overflow: hidden;
-      width:330px;
-      position: absolute;
-      left: 740px;
-      top: 10px;
-      border: none;
-      background-color: #011219;
-    }
-
-    /* Style the buttons inside the tab */
-    .tab button {
-      background-color: #336b87;
-      float: left;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      color: white;
-      border-radius:5%;
-      font-variant: small-caps;
-      padding: 14px 14px;
-      transition: 0.3s;
-      font-size: 20px;
-      font-family: 'VarelaRound';
-      opacity: 0.7;
-      margin: 3px 0 0 0;
-      
-    }
-
-    /* Change background color of buttons on hover */
-    .tab button:hover {
-      opacity: 1;
-      margin: 3px 0 0 0;
-    }
-
-    .tab button.active {
-      opacity: 1;
-      margin: 0 0 0 0;
-    }
-
-    #tab_highlight {
-    height: 40px;
-    width: 282px;
-    position: absolute;
-    left: 740px;
-    top: 60px;
-    overflow: auto;
-    background-image: linear-gradient(#336b87, #011219);
-    }
-
-    /*Tab content and divider for scrolling*/
-
-    #myDIV {
-    height: 195px;
-    width: 310px;
-    overflow: auto;
-    }
-
-    #content {
-
-    position: absolute;
-    }
-
-    .scroll {
-      width: 20px;
-      height: 195px;
-      overflow: auto;
-      float: left;
-      margin: 0 10px;
-    }
-
-    .scroll::-webkit-scrollbar {
-      width: 10px;
-    }
-    
-    .scroll::-webkit-scrollbar-thumb {
-      background: #336b87;
-      border-radius: 20px;
-    }
-
-    .scroll::-webkit-scrollbar-track {
-      background: #ddd;
-      border-radius: 20px;
-    }
+    <style> 
 
     #my-file{
     display:none;
     }
 
-    /* custom checkbox for clamped curves */
-    /* Create a custom checkbox */
-    .checkmark {
-      position: absolute;
-      height: 25px;
-      width: 25px;
-      background-color: #eee;
+    /* The container */
+    .container {
+      display: block;
+      position: relative;
+      padding-left: 0px;
+      margin-bottom: 0px;
+      cursor: pointer;
+      font-size: 22px;
+      width:20px;
+      height: 20px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     /* Hide the browser's default checkbox */
-    .input {
+    .container input {
       position: absolute;
       opacity: 0;
       cursor: pointer;
@@ -162,6 +33,54 @@
       width: 0;
     }
 
+    /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      border-radius:15%;
+      background-color: #336b87;
+      opacity: 0.7;
+    }
+
+    /* On mouse-over, add a grey background color */
+  .container:hover input ~ .checkmark {
+    background-color: #336b87;
+    opacity: 1;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .container input:checked ~ .checkmark {
+    background-color: #336b87;
+    opacity: 1;
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
     </style>
 
     <meta charset="UTF-8">
@@ -179,10 +98,14 @@
     <script language="javascript" type="text/javascript" src="bezier.js"></script>
     <script language="javascript" type="text/javascript" src="mouse_events.js"></script>
     <div id="sketchHolder"></div>
-    <!-- <div id="button"></div> -->
-
-    <!-- this line removes any default padding and style. you might only need one of these values set. -->
     <style> body {padding: 20; margin: 20; background: #011219; overflow-x:hidden; overflow-y: hidden} </style>
+
+    <!-- <div id="button"></div> -->
+    <link rel="stylesheet" type="text/css" href="CSS/mybutton.css" />
+    <link rel="stylesheet" type="text/css" href="CSS/mytab.css" />
+    <link rel="stylesheet" type="text/css" href="CSS/myslider.css" />
+    <link rel="stylesheet" type="text/css" href="CSS/myscroll.css" />
+    <!-- this line removes any default padding and style. you might only need one of these values set. -->
   </head>
 
 
@@ -208,8 +131,11 @@
       <button title="Exports all the curve data as a JSON file." class = "mybutton" id='exportjson'>Export JSON</button>
       <button title="Resets the canvas." class = "mybutton" id='reset'>Reset</button>
       <input type="range" min="70" max="200" value="100"  step='1' class="myslider" id="zoomslider">
-      <!-- <input type="checkbox">
-      <span class="checkmark"></span> -->
+      
+      <label class="container"id="clampedbox">
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
 
     </p>
 
