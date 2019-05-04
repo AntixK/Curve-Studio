@@ -1,4 +1,5 @@
-function nurbs(t, degree, points, weights, knots, result) 
+
+function nurbs(t, degree, points, weights, clamped,knots, result) 
 {
 
   var i,j,s,l;              // function-scoped iteration variables
@@ -19,14 +20,26 @@ function nurbs(t, degree, points, weights, knots, result)
   if(!knots) {
     // build knot vector of length [n + degree + 1]
     var knots = [];
-    for(i=0; i<n+degree+1; i++) {
-      knots[i] = i;
+    knots[0] = 0;
+    let m =1;
+    for(i=1; i<n+degree+1; i++) 
+    {
+      if(clamped && (i > n || i < degree+1))
+      {
+          knots[i] = knots[i-1];
+      }
+      else
+      {
+        knots[i] = m;
+        m++;
+      }
+      
     }
   } else {
     if(knots.length !== n+degree+1) throw new Error('bad knot vector length');
   }
 
-  var domain = [
+var domain = [
     degree,
     knots.length-1 - degree
   ];
@@ -46,7 +59,7 @@ function nurbs(t, degree, points, weights, knots, result)
   }
 
   // convert points to homogeneous coordinates
-  var v = [];
+  let v = [];
   for(i=0; i<n; i++) {
     v[i] = [];
 

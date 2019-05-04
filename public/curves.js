@@ -40,7 +40,7 @@ function draw_nurbs()
 
   beginShape();
   for(var t=0; t<1; t+=0.01) {
-    var point = nurbs(t, degree, control_points, w);
+    var point = nurbs(t, degree, control_points, w, clamped_curve);
     vertex(point[0],point[1]);
   }
   endShape();
@@ -58,8 +58,10 @@ function draw_bezier()
     var point = bezier_spline(t, control_points);
     vertex(point[0],point[1]);
   }
+  
   endShape();
 
+  
 }
 
 function draw_curve()

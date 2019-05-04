@@ -7,6 +7,8 @@ var curve_points;
 var curve_choice = 'Catmull Rom Spline';
 var degree = 2;
 var degree_slider;
+let clamped_box;
+var clamped_curve = false;
 
 var curve_dict = {
   'Catmull Rom Spline': 0,
@@ -123,12 +125,6 @@ function setup() {
   w_text.style('font-size', '20px');
   w_text.style('font-family', button_font.font.names.postScriptName["en"]);
   w_text.style('color', 'white');
-
-  degree_text = createP("Degree");
-  degree_text.position(NUM_X +30 + text_offset_x, NUM_Y-85);
-  degree_text.style('font-size', '20px');
-  degree_text.style('font-family', button_font.font.names.postScriptName["en"]);
-  degree_text.style('color', 'white');
   
   mouse_pos = createP("");
   mouse_pos.position(WIDTH - 125- text_offset_x,HEIGHT + text_offset_y);
@@ -145,13 +141,23 @@ function setup() {
   x_mark.mouseOut(dehighlight_x_mark);
   x_mark.mouseClicked(delete_point);
   
+  degree_text = createP("Degree");
+  degree_text.position(NUM_X -10 + text_offset_x, NUM_Y-85);
+  degree_text.style('font-size', '20px');
+  degree_text.style('font-family', button_font.font.names.postScriptName["en"]);
+  degree_text.style('color', 'white');
+
   degree_slider = createInput('2','Number'); 
   degree_slider.style('width','70px');
   degree_slider.style('text-align','center');
   degree_slider.attribute('min', '1');
   degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
-  degree_slider.position(NUM_X + 140, NUM_Y - 65);
+  degree_slider.position(NUM_X + 100, NUM_Y - 65);
   degree_slider.changed(update_degree);
+
+  clamped_box = createCheckbox('Clamped', clamped_curve);
+  clamped_box.position(NUM_X + 240, NUM_Y - 65);
+  clamped_box.changed(set_clamped);
 
   reset_canvas(false);
 
@@ -296,8 +302,7 @@ function reset_canvas(flag = true)
   zoom_slider.value(zoom*100); 
   panx = 0;
   pany = 0;
-  degree =2;
-  degree_slider.value(degree);
+    
 
   if(flag)
   {
@@ -326,6 +331,11 @@ function reset_canvas(flag = true)
   x_mark.html('\u2718');
   
   noStroke();
+
+  degree_slider.attribute('min', '1');
+  degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
+  degree =2;
+  degree_slider.value(degree);
 }
 
 function update_control_pts()
@@ -355,7 +365,7 @@ function update_zoom()
 
 function create_grid()
 {
-  let w = 20/zoom;
+  let w = 20*zoom;
   stroke(255);
   strokeWeight(0.2);
   for(let x=-panx; x<(WIDTH)/zoom - panx; x+= w)
@@ -365,7 +375,7 @@ function create_grid()
 
   for(let x=-pany; x<(HEIGHT)/zoom- pany; x+= w)
   {
-    line(-(WIDTH)/zoom -    panx,x, (WIDTH )/zoom- panx,x);
+    line(-(WIDTH)/zoom - panx,x, (WIDTH )/zoom- panx,x);
   }
 }
 
@@ -400,4 +410,16 @@ function update_degree()
 { 
 
   degree = Number(degree_slider.value());
+}
+
+function set_clamped()
+{
+  if(this.checked())
+  {
+    clamped_curve=true;
+  }
+  else
+  {
+    clamped_curve = false;
+  }
 }

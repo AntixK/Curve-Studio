@@ -97,7 +97,7 @@
 
     #tab_highlight {
     height: 40px;
-    width: 309px;
+    width: 282px;
     position: absolute;
     left: 740px;
     top: 60px;
@@ -142,6 +142,24 @@
 
     #my-file{
     display:none;
+    }
+
+    /* custom checkbox for clamped curves */
+    /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      height: 25px;
+      width: 25px;
+      background-color: #eee;
+    }
+
+    /* Hide the browser's default checkbox */
+    .input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
     }
 
     </style>
@@ -190,7 +208,8 @@
       <button title="Exports all the curve data as a JSON file." class = "mybutton" id='exportjson'>Export JSON</button>
       <button title="Resets the canvas." class = "mybutton" id='reset'>Reset</button>
       <input type="range" min="70" max="200" value="100"  step='1' class="myslider" id="zoomslider">
-    
+      <!-- <input type="checkbox">
+      <span class="checkmark"></span> -->
 
     </p>
 

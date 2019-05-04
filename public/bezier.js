@@ -8,7 +8,7 @@ function bezier_spline(t, p) {
 //     return point.slice();
 //   });
 
-    var v = [];
+    let v = [];
 
     for (var i = 0; i < p.length; i++)
     {   
@@ -22,8 +22,8 @@ function bezier_spline(t, p) {
   for(var i=order; i>0; i--) {
     for(var j=0; j<order; j++) {
       // interpolate each component
-        v[j].x = (1 - t) * v[j].x + t * v[j+1].x;
-        v[j].y = (1 - t) * v[j].y + t * v[j+1].y;
+        v[j][0] = (1 - t) * v[j][0] + t * v[j+1][0];
+        v[j][1] = (1 - t) * v[j][1] + t * v[j+1][1];
 
     }
   }

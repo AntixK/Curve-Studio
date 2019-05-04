@@ -111,6 +111,9 @@ function scroll_zoom(event) {
   zoom += sensativity * event.deltaY;
   zoom = constrain(zoom, 0.05, 5.0);
   zoom_slider.value(zoom*100);
+  panx -= (mouseX/zoom)*(sensativity *event.deltaY);
+  pany -= (mouseY/zoom)*(sensativity *event.deltaY);
+
   //uncomment to block page scrolling
   return false;
 }
