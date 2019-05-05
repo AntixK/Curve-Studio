@@ -1,6 +1,6 @@
 # Squirrel Curve Studio 
 
-Squirrel Curve Studio is an intuitive easy-tp-use app for creating beautiful spline curves (free-form curves). Motivated by the lack of freely available curve designers, Squirrel provides a clean UI for designing, exporting and importing free-form curves. 
+Squirrel Curve Studio is an intuitive easy-to-use app for creating beautiful spline curves (free-form curves). Motivated by the lack of freely available curve designers, Squirrel provides a clean UI for designing, exporting and importing free-form curves. 
 
 ## Interface 
 <img src="https://github.com/AntixK/Curve-Studio/blob/master/GitHub%20assets/Catmull.PNG" alt="drawing" width="700"/>
