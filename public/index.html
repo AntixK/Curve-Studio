@@ -115,7 +115,7 @@
     <p>
       <div class="tab",id="tabs">
           <button title="Design Catmull-Rom curve" class="tablinks active" onclick="opentab(event, 'Catmull Rom Spline')" id="defaultOpen">Catmull</button>
-          <button title="Design Bezier curve" class="tablinks" onclick="opentab(event, 'Bezier')">Bezier</button>
+          <button title="Design Bezier curve" class="tablinks" onclick="opentab(event, 'Bezier')">B&#xE9zier</button>
           <button title="Design NURBS curve" class="tablinks" onclick="opentab(event, 'NURBS')">NURBS</button>
       </div>
       
@@ -131,7 +131,7 @@
       <button title="Exports all the curve data as a JSON file." class = "mybutton" id='exportjson'>Export JSON</button>
       <button title="Resets the canvas." class = "mybutton" id='reset'>Reset</button>
       <input type="range" min="70" max="200" value="100"  step='1' class="myslider" id="zoomslider">
-      
+      <input type="number" min="1" max="5" value="2" id="degreeslider">
       <label class="container"id="clampedbox">
         <input type="checkbox">
         <span class="checkmark"></span>

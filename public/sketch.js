@@ -1,6 +1,6 @@
 var INITIAL_NUM_PTS = 5;
 var N = INITIAL_NUM_PTS;
-var MAX_NUM_PTS = 10;
+var MAX_NUM_PTS = 15;
 var curr_marker;
 var control_points = [];
 var curve_points;
@@ -8,7 +8,7 @@ var curve_choice = 'Catmull Rom Spline';
 var degree = 2;
 var degree_slider;
 let clamped_box;
-var clamped_curve = false;
+var clamped_curve = true;
 
 var curve_dict = {
   'Catmull Rom Spline': 0,
@@ -147,7 +147,8 @@ function setup() {
   degree_text.style('font-family', button_font.font.names.postScriptName["en"]);
   degree_text.style('color', 'white');
 
-  degree_slider = createInput('2','Number'); 
+  degree_slider =select("#degreeslider"); 
+  //degree_slider.parent("container");
   degree_slider.style('width','70px');
   degree_slider.style('text-align','center');
   degree_slider.attribute('min', '1');
@@ -167,6 +168,7 @@ function setup() {
   clamped_box.style('color', 'white');
   clamped_box.position(NUM_X + 180, NUM_Y - 68);
   clamped_box.changed(set_clamped);
+  update_clamped_box(); 
 
   reset_canvas(false);
 
@@ -301,10 +303,11 @@ function import_json()
       x_mark.position(240 + text_offset_x,(- 12)+(N-1)*40 + text_offset_y);
       x_mark.html('\u2718');
 
-      clamped_curve = in_json_file.clamped;
+      //clamped_curve = in_json_file.clamped;
       degree = in_json_file.degree;
       update_degree_slider();
-      update_clamped_box();
+      if(in_json_file.clamped && !clamped_curve)
+        update_clamped_box();
     }
     reader.readAsText(file_handle.files[0]);
   }, false);   
@@ -318,7 +321,7 @@ function reset_canvas(flag = true)
   panx = 0;
   pany = 0;
     
-  clamped_curve = false;
+  clamped_curve = true;
   if(flag)
   {
     while(N > 0)
@@ -347,11 +350,10 @@ function reset_canvas(flag = true)
   
   noStroke();
 
-  degree_slider.attribute('min', '1');
-  degree_slider.attribute('max',(INITIAL_NUM_PTS -1).toString());
   degree =2;
   update_degree_slider();
-  update_clamped_box();
+
+  update_clamped_box(); 
 
 }
 
@@ -425,14 +427,14 @@ function opentab(evt, curve_name) {
 
 function update_degree()
 { 
-
+  console.log("am here!");
   degree = Number(degree_slider.value());
 }
 
 function set_clamped()
 {
 
-  clamped_box.value(!clamped_curve);
+  //document.getElementById('clampedbox').click();
   clamped_curve = !clamped_curve;
 }
 
@@ -443,7 +445,6 @@ function update_degree_slider()
 
 function update_clamped_box()
 {
-  clamped_box.value(clamped_curve);
-  document.getElementById("clampedbox").checked = clamped_curve;
+  document.getElementById('clampedbox').click();
   
 }
