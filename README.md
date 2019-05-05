@@ -13,7 +13,7 @@ Squirrel Curve Studio is an intuitive easy-to-use app for creating beautiful spl
 I welcome pull-requests for any new functionality or improving the app's experience overall. I am currently looking towards decreasing the app size using Neutralino.js. 
 
 ## For End-Users
-The executables for all platforms will be released soon.
+See [releases](https://github.com/AntixK/Curve-Studio/releases) for getting pre-built binaries.
 
 ## Built With
 
