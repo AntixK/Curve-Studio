@@ -8,7 +8,8 @@ class Marker
     this.xOffset = 0;
     this.yOffset = 0;
     this.boxSize = 15;
-    this.overBox = false;  
+    this.overBox = false;
+    this.scale_pts(control_pts_scale);
   }
 
   check_in_circle()
@@ -27,5 +28,11 @@ class Marker
     
     this.overBox= false;
     return false;
+  }
+
+  scale_pts(scale)
+  {
+    this.x *= scale;
+    this.y *= scale;
   }
 }

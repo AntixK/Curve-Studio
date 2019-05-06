@@ -10,7 +10,7 @@ function click_point()
       curr_point_id = i;
       text_field_array[i].highlight_ind();
       curr_marker.xOffset = mouseX/zoom - curr_marker.x;
-      curr_marker.yOffset = mouseY/zoom - curr_marker.y;     
+      curr_marker.yOffset = mouseY/zoom - curr_marker.y;    
       break;
       //fill(244, 122, 158);
     }
@@ -28,10 +28,22 @@ function click_point()
 
 function mouseDragged() 
 {
-  if (locked) {    
-    curr_marker.x = mouseX/zoom - curr_marker.xOffset;
-    curr_marker.y = mouseY/zoom - curr_marker.yOffset;
-    update_text_field();
+  if (locked)
+  {    
+    if (keyIsPressed === true && keyCode == SHIFT)
+    {
+      stroke(line_color, 0.8);
+      strokeWeight(3);
+      line(curr_marker.x, curr_marker.y, mouseX/zoom- panx, mouseY/zoom- pany);
+      let val = constrain(0.005*dist(curr_marker.x, curr_marker.y, mouseX/zoom- panx, mouseY/zoom- pany), 0, 1);
+      text_field_array[curr_point_id].set_w_val(val);
+    }
+    else
+    {
+      curr_marker.x = mouseX/zoom - curr_marker.xOffset;
+      curr_marker.y = mouseY/zoom - curr_marker.yOffset;
+      update_text_field();
+    }
   }
 
   else if((mouseX)/zoom - panx < WIDTH -panx && (mouseY )/zoom - pany < HEIGHT -pany)
@@ -48,6 +60,7 @@ function release_point()
   pan_lock = false;
   curr_marker.boxSize = 15;
   text_field_array[curr_point_id].dehighlight_ind();
+
 }
 
 function create_point() 
@@ -108,18 +121,44 @@ function delete_point()
 }
 
 function scroll_zoom(event) {
-  zoom += sensativity * event.deltaY;
-  
-  if(zoom >= 0.5 && zoom < 2.0 )
-  { 
-    panx -= (mouseX/zoom)*(sensativity *event.deltaY);
-    pany -= (mouseY/zoom)*(sensativity *event.deltaY);
-  }
-  zoom = constrain(zoom, 0.5, 2.0);
-  zoom_slider.value(zoom*100);
 
-  //uncomment to block page scrolling
-  return false;
+  if (keyIsPressed === true && keyCode == CONTROL)
+  { 
+    let change = 1+Math.abs(event.deltaY * 0.0005)
+    //control_pts_scale += event.deltaY * 0.0005;    
+    console.log(control_pts_scale, Math.sign(event.deltaY * 0.0005));
+    if(control_pts_scale+event.deltaY * 0.0005 < -0.1 || 
+       control_pts_scale+event.deltaY * 0.0005 > 4)
+      change = 1;
+    else
+      control_pts_scale += event.deltaY * 0.0005;  
+  
+    for(let i=0; i< control_points.length;++i)
+    { 
+      if(Math.sign(event.deltaY * 0.0005) >= 0)
+        control_points[i].scale_pts(1/change);
+      else
+      control_points[i].scale_pts(change);
+    }
+    update_text_field();
+  
+    //control_pts_scale = constrain(control_pts_scale, 0.5,1.5);
+  }
+  else
+  {
+    zoom += sensativity * event.deltaY;
+    
+    if(zoom >= 0.5 && zoom < 3.0 )
+    { 
+      panx -= (mouseX/zoom)*(sensativity *event.deltaY);
+      pany -= (mouseY/zoom)*(sensativity *event.deltaY);
+    }
+    zoom = constrain(zoom, 0.5, 3.0);
+    zoom_slider.value(zoom*100);
+
+    //uncomment to block page scrolling
+    return false;
+  }
 }
 
 function highlight_x_mark()

@@ -9,6 +9,7 @@ var degree = 2;
 var degree_slider;
 let clamped_box;
 var clamped_curve = true;
+var control_pts_scale = 1.0;
 
 var curve_dict = {
   'Catmull Rom Spline': 0,
@@ -273,6 +274,7 @@ function import_json()
       zoom_slider.value(zoom*100); 
       panx = 0;
       pany = 0;
+      control_pts_scale = 1.0;
 
       while(N > 0)
       {
@@ -320,7 +322,7 @@ function reset_canvas(flag = true)
   zoom_slider.value(zoom*100); 
   panx = 0;
   pany = 0;
-    
+  control_pts_scale = 1.0;
   clamped_curve = true;
   if(flag)
   {
