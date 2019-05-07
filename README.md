@@ -12,6 +12,20 @@ Squirrel Curve Studio is an intuitive easy-to-use app for creating beautiful spl
 ## For Developers [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 I welcome pull-requests for any new functionality or improving the app's experience overall. I am currently looking towards decreasing the app size using Neutralino.js. 
 
+To get started, clone this repository using [Git](https://git-scm.com) and install [npm](http://npmjs.com) along with [Node.js](https://nodejs.org/en/download/).
+From your command line:
+
+```bash
+# Clone this repository
+git clone https://github.com/AntixK/Curve-Studio
+# Go into the repository
+cd Curve-Studio
+# Install dependencies
+npm install
+# Run the app
+npm start
+```
+
 ## For End-Users
 See [releases](https://github.com/AntixK/Curve-Studio/releases) for getting pre-built binaries.
 
